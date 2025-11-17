@@ -53,7 +53,8 @@ export default function AnimatedBackground() {
       mouseRef.current.isActive = false;
     };
 
-    // Gyroscope handler for mobile devices
+    let gyroscope: any = null;
+
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta !== null && e.gamma !== null) {
         // beta: front-back tilt (-180 to 180)
@@ -75,7 +76,6 @@ export default function AnimatedBackground() {
       }
     };
 
-    // Firefox MozOrientation event (older Android Firefox)
     const handleMozOrientation = (e: any) => {
       if (e.x !== null && e.y !== null) {
         // x and y are in -1 to 1 range
@@ -99,20 +99,54 @@ export default function AnimatedBackground() {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseleave', handleMouseLeave);
     } else {
-      // Request permission for gyroscope on iOS 13+
-      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-        (DeviceOrientationEvent as any).requestPermission()
-          .then((permissionState: string) => {
-            if (permissionState === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation);
-            }
-          })
-          .catch(console.error);
+      // Try modern Gyroscope API first (Firefox, Chrome)
+      let fallbackActive = false;
+
+      if ('Gyroscope' in window) {
+        try {
+          gyroscope = new (window as any).Gyroscope({ frequency: 60 });
+
+          gyroscope.addEventListener('reading', () => {
+            // Gyroscope gives rotation rates in rad/s
+            const sensitivity = 0.05;
+            const normalizedGamma = Math.max(-1, Math.min(1, gyroscope.y * sensitivity));
+            const normalizedBeta = Math.max(-1, Math.min(1, gyroscope.x * sensitivity));
+
+            parallaxOffset.x = normalizedGamma * 30;
+            parallaxOffset.y = normalizedBeta * 30;
+
+            gyroRef.current = {
+              x: width / 2 + normalizedGamma * width * 0.2,
+              y: height / 2 + normalizedBeta * height * 0.2,
+              isActive: true
+            };
+          });
+
+          gyroscope.start();
+        } catch (error) {
+          console.log('Gyroscope API failed, falling back to DeviceOrientation');
+          fallbackActive = true;
+        }
       } else {
-        // Non-iOS devices (including Firefox)
-        window.addEventListener('deviceorientation', handleOrientation);
-        // Firefox fallback
-        window.addEventListener('MozOrientation', handleMozOrientation);
+        fallbackActive = true;
+      }
+
+      // Fallback to DeviceOrientation API
+      if (fallbackActive) {
+        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+          // iOS 13+ requires permission
+          (DeviceOrientationEvent as any).requestPermission()
+            .then((permissionState: string) => {
+              if (permissionState === 'granted') {
+                window.addEventListener('deviceorientation', handleOrientation);
+              }
+            })
+            .catch(console.error);
+        } else {
+          // Non-iOS devices
+          window.addEventListener('deviceorientation', handleOrientation);
+          window.addEventListener('MozOrientation', handleMozOrientation);
+        }
       }
     }
 
@@ -347,6 +381,9 @@ export default function AnimatedBackground() {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseleave', handleMouseLeave);
       } else {
+        if (gyroscope) {
+          gyroscope.stop();
+        }
         window.removeEventListener('deviceorientation', handleOrientation);
         window.removeEventListener('MozOrientation', handleMozOrientation);
       }
