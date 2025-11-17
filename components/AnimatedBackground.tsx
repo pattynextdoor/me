@@ -23,6 +23,7 @@ export default function AnimatedBackground() {
   const timeRef = useRef(0);
   const rafRef = useRef<number | undefined>(undefined);
   const mouseRef = useRef({ x: 0, y: 0, isActive: false });
+  const gyroRef = useRef({ x: 0, y: 0, isActive: false });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -49,10 +50,41 @@ export default function AnimatedBackground() {
       mouseRef.current.isActive = false;
     };
 
+    // Gyroscope handler for mobile devices
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta !== null && e.gamma !== null) {
+        // beta: front-back tilt (-180 to 180)
+        // gamma: left-right tilt (-90 to 90)
+        // Map to screen coordinates
+        const x = ((e.gamma + 90) / 180) * width; // -90 to 90 -> 0 to width
+        const y = ((e.beta + 90) / 180) * height; // Use -90 to 90 range for better control
+
+        gyroRef.current = {
+          x: Math.max(0, Math.min(width, x)),
+          y: Math.max(0, Math.min(height, y)),
+          isActive: true
+        };
+      }
+    };
+
     // Add mouse event listeners to window for better tracking
     if (!isMobile) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseleave', handleMouseLeave);
+    } else {
+      // Request permission for gyroscope on iOS 13+
+      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+        (DeviceOrientationEvent as any).requestPermission()
+          .then((permissionState: string) => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation);
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Non-iOS devices
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
     }
 
     // Setup canvas
@@ -183,11 +215,13 @@ export default function AnimatedBackground() {
         // Bottom band (0.7 to 1.0) - light waves
         const bottomBandStrength = Math.max(0, (verticalFactor - 0.7) / 0.3);
 
-        // Mouse interaction effect - gravity pull
+        // Mouse/Gyroscope interaction effect - gravity pull
         let mouseInfluence = 0;
-        if (mouseRef.current.isActive && !isMobile) {
-          const dx = point.baseX - mouseRef.current.x;
-          const dy = point.baseY - mouseRef.current.y;
+        const interactionSource = isMobile ? gyroRef.current : mouseRef.current;
+
+        if (interactionSource.isActive) {
+          const dx = point.baseX - interactionSource.x;
+          const dy = point.baseY - interactionSource.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           const maxDistance = 250; // Influence radius
 
@@ -273,6 +307,8 @@ export default function AnimatedBackground() {
       if (!isMobile) {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseleave', handleMouseLeave);
+      } else {
+        window.removeEventListener('deviceorientation', handleOrientation);
       }
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);

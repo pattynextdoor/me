@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { fadeInVariants } from "@/lib/animations";
 
 export default function About() {
@@ -22,6 +22,9 @@ export default function About() {
     damping: 20
   });
 
+  // Detect if on mobile
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   // Handle mouse move
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -39,6 +42,42 @@ export default function About() {
     mouseX.set(0);
     mouseY.set(0);
   };
+
+  // Gyroscope support for mobile
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta !== null && e.gamma !== null) {
+        // beta: front-back tilt (-180 to 180)
+        // gamma: left-right tilt (-90 to 90)
+        // Normalize to -0.5 to 0.5 range
+        const normalizedX = Math.max(-0.5, Math.min(0.5, e.gamma / 90));
+        const normalizedY = Math.max(-0.5, Math.min(0.5, (e.beta - 90) / 90));
+
+        mouseX.set(normalizedX);
+        mouseY.set(normalizedY);
+      }
+    };
+
+    // Request permission for gyroscope on iOS 13+
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+      (DeviceOrientationEvent as any).requestPermission()
+        .then((permissionState: string) => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          }
+        })
+        .catch(console.error);
+    } else {
+      // Non-iOS devices
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
+
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation);
+    };
+  }, [isMobile, mouseX, mouseY]);
 
   return (
     <section id="about" className="min-h-screen flex items-center py-20 px-4 md:px-8 lg:px-9 rounded-t-[40px] md:rounded-t-[60px] relative overflow-hidden bg-gradient-to-b from-primary/50 to-primary/80">
