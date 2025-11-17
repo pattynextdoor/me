@@ -47,7 +47,14 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
           >
             {/* Company & Role */}
             <div className="flex items-start gap-4">
-              <div className="text-gray-700 mt-1 flex-shrink-0">
+              <div
+                className="text-gray-700 mt-1 flex-shrink-0"
+                style={{
+                  willChange: 'auto',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden'
+                }}
+              >
                 {exp.icon}
               </div>
               <div>
@@ -117,24 +124,44 @@ export default function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
-  // Scroll-based animation for background transition
+  // Scroll-based animation for flip down effect
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "start start"],
+    offset: ["start end", "start center"],
   });
 
-  const backgroundColor = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["#0B192C", "#E8E6DD"]
+  // Flip animation - rotates from -90deg (flipped up) to 0deg (normal)
+  // Completes the flip in the first 75% of scroll progress
+  const rotateX = useTransform(scrollYProgress, [0, 0.75], [-90, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4, 0.75], [0, 0.5, 1]);
+
+  // Y-axis translation to enhance 3D depth during flip
+  const translateY = useTransform(scrollYProgress, [0, 0.4, 0.75], [100, -50, 0]);
+
+  // Drop shadow that appears during flip for 3D depth
+  const shadowOpacity = useTransform(scrollYProgress, [0, 0.4, 0.75], [0, 0.9, 0.4]);
+  const shadowBlur = useTransform(scrollYProgress, [0, 0.4, 0.75], [0, 80, 40]);
+  const shadowY = useTransform(scrollYProgress, [0, 0.4, 0.75], [0, 60, 25]);
+
+  const boxShadow = useTransform(
+    [shadowY, shadowBlur, shadowOpacity],
+    ([y, blur, opacity]) => `0px ${y}px ${blur}px rgba(0, 0, 0, ${opacity})`
   );
 
   return (
     <motion.section
       id="experience"
       ref={sectionRef}
-      style={{ backgroundColor }}
-      className="min-h-screen py-32 px-4 md:px-8 lg:px-9 relative overflow-hidden rounded-t-[40px] md:rounded-t-[60px]"
+      style={{
+        rotateX,
+        translateY,
+        opacity,
+        transformPerspective: 1200,
+        transformStyle: "preserve-3d",
+        transformOrigin: "top center",
+        boxShadow,
+      }}
+      className="min-h-screen py-32 px-4 md:px-8 lg:px-9 relative overflow-hidden rounded-t-[40px] md:rounded-t-[60px] bg-[#E8E6DD]"
     >
       <div className="max-w-[1400px] mx-auto w-full" ref={ref}>
         {/* Intro text */}
