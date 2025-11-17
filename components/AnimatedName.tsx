@@ -15,7 +15,7 @@ export default function AnimatedName() {
       transition: {
         delay: i * 0.08,
         duration: 0.6,
-        ease: [0.44, 0, 0.56, 1],
+        ease: [0.44, 0, 0.56, 1] as [number, number, number, number],
       },
     }),
   };
@@ -75,7 +75,7 @@ export default function AnimatedName() {
           transition={{
             delay: 1.2,
             duration: 0.8,
-            ease: [0.44, 0, 0.56, 1],
+            ease: [0.44, 0, 0.56, 1] as [number, number, number, number],
           }}
         />
       </motion.div>
