@@ -15,6 +15,70 @@ interface ExperienceItem {
   icon: JSX.Element;
 }
 
+// Separate component for each experience item to properly use hooks
+function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) {
+  const itemRef = useRef(null);
+  const itemInView = useInView(itemRef, { once: true, amount: 0.3 });
+
+  return (
+    <motion.div
+      ref={itemRef}
+      className="group relative z-10"
+      initial={{ opacity: 0, y: 20 }}
+      animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Decorative line */}
+      <div className="absolute left-0 top-0 w-full h-px bg-gray-300" />
+
+      <div className="py-16 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+        {/* Number */}
+        <div className="md:col-span-2">
+          <div className="text-sm font-mono text-gray-400">{exp.number}</div>
+        </div>
+
+        {/* Content */}
+        <div className="md:col-span-10">
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={itemInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            {/* Company & Role */}
+            <div className="flex items-start gap-4">
+              <div className="text-gray-700 mt-1 flex-shrink-0">
+                {exp.icon}
+              </div>
+              <div>
+                <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-2">
+                  {exp.company}
+                </h3>
+                <p className="text-base text-gray-600">{exp.role}</p>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="space-y-4">
+              {exp.description.map((paragraph, pIndex) => (
+                <motion.p
+                  key={pIndex}
+                  className="text-gray-700 text-base leading-relaxed max-w-3xl"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, delay: 0.3 + pIndex * 0.1 }}
+                >
+                  {paragraph}
+                </motion.p>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 const experiences: ExperienceItem[] = [
   {
     number: "2021 - Present",
@@ -51,7 +115,7 @@ const experiences: ExperienceItem[] = [
 export default function Experience() {
   const ref = useRef(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: false, amount: 0.1 });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   // Scroll-based animation for background transition
   const { scrollYProgress } = useScroll({
@@ -91,61 +155,7 @@ export default function Experience() {
         {/* Experience items */}
         <div className="space-y-0">
           {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              className="group relative z-10"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-            >
-              {/* Decorative line */}
-              <div className="absolute left-0 top-0 w-full h-px bg-gray-300" />
-
-              <div className="py-16 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
-                {/* Number */}
-                <div className="md:col-span-2">
-                  <div className="text-sm font-mono text-gray-400">{exp.number}</div>
-                </div>
-
-                {/* Content */}
-                <div className="md:col-span-10">
-                  <motion.div
-                    className="space-y-6"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                    transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
-                  >
-                    {/* Company & Role */}
-                    <div className="flex items-start gap-4">
-                      <div className="text-gray-700 mt-1 flex-shrink-0">
-                        {exp.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-2">
-                          {exp.company}
-                        </h3>
-                        <p className="text-base text-gray-600">{exp.role}</p>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div className="space-y-4">
-                      {exp.description.map((paragraph, pIndex) => (
-                        <motion.p
-                          key={pIndex}
-                          className="text-gray-700 text-base leading-relaxed max-w-3xl"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                          transition={{ duration: 0.5, delay: index * 0.15 + 0.4 + pIndex * 0.1 }}
-                        >
-                          {paragraph}
-                        </motion.p>
-                      ))}
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
+            <ExperienceCard key={index} exp={exp} index={index} />
           ))}
 
           {/* Bottom line */}

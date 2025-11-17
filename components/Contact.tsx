@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef } from "react";
 import { fadeInVariants, containerVariants, itemVariants } from "@/lib/animations";
 
@@ -30,7 +30,6 @@ const socialLinks: SocialLink[] = [
 
 export default function Contact() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.1 });
 
   return (
     <section id="contact" className="min-h-screen flex items-center py-20 px-4 md:px-8 lg:px-9">
@@ -39,7 +38,8 @@ export default function Contact() {
           className="text-center space-y-12"
           variants={fadeInVariants}
           initial="hidden"
-          animate={isInView ? "show" : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
         >
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-text">
@@ -54,7 +54,8 @@ export default function Contact() {
             className="flex flex-wrap gap-4 justify-center max-w-2xl mx-auto"
             variants={containerVariants}
             initial="hidden"
-            animate={isInView ? "show" : "hidden"}
+            whileInView="show"
+            viewport={{ once: true, amount: 0.1 }}
           >
             {socialLinks.map((link) => (
               <motion.a
@@ -102,7 +103,8 @@ export default function Contact() {
         <motion.footer
           className="mt-20 pt-8 border-t border-border text-center text-text/50"
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.8, delay: 1 }}
         >
           <p>© {new Date().getFullYear()} Patrick Tumbucon. Built with Next.js & Framer Motion.</p>

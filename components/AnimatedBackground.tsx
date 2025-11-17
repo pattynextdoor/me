@@ -37,6 +37,9 @@ export default function AnimatedBackground() {
     let isMobile = width < 768; // Mobile breakpoint
     let isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
 
+    // Parallax offset for mobile gyroscope
+    const parallaxOffset = { x: 0, y: 0 };
+
     // Mouse interaction handlers - use window for global tracking
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = {
@@ -55,13 +58,37 @@ export default function AnimatedBackground() {
       if (e.beta !== null && e.gamma !== null) {
         // beta: front-back tilt (-180 to 180)
         // gamma: left-right tilt (-90 to 90)
-        // Map to screen coordinates
-        const x = ((e.gamma + 90) / 180) * width; // -90 to 90 -> 0 to width
-        const y = ((e.beta + 90) / 180) * height; // Use -90 to 90 range for better control
+
+        // For parallax effect, normalize to -1 to 1 range
+        const normalizedGamma = Math.max(-1, Math.min(1, e.gamma / 45)); // -45 to 45 degrees
+        const normalizedBeta = Math.max(-1, Math.min(1, (e.beta - 90) / 45)); // 45 to 135 degrees (centered at 90)
+
+        // Set parallax offset (multiplied by factor in render)
+        parallaxOffset.x = normalizedGamma * 30; // Max 30px offset
+        parallaxOffset.y = normalizedBeta * 30; // Max 30px offset
 
         gyroRef.current = {
-          x: Math.max(0, Math.min(width, x)),
-          y: Math.max(0, Math.min(height, y)),
+          x: width / 2 + normalizedGamma * width * 0.2,
+          y: height / 2 + normalizedBeta * height * 0.2,
+          isActive: true
+        };
+      }
+    };
+
+    // Firefox MozOrientation event (older Android Firefox)
+    const handleMozOrientation = (e: any) => {
+      if (e.x !== null && e.y !== null) {
+        // x and y are in -1 to 1 range
+        const normalizedGamma = Math.max(-1, Math.min(1, e.y)); // y controls left-right
+        const normalizedBeta = Math.max(-1, Math.min(1, e.x)); // x controls up-down
+
+        // Set parallax offset
+        parallaxOffset.x = normalizedGamma * 30;
+        parallaxOffset.y = normalizedBeta * 30;
+
+        gyroRef.current = {
+          x: width / 2 + normalizedGamma * width * 0.2,
+          y: height / 2 + normalizedBeta * height * 0.2,
           isActive: true
         };
       }
@@ -82,8 +109,10 @@ export default function AnimatedBackground() {
           })
           .catch(console.error);
       } else {
-        // Non-iOS devices
+        // Non-iOS devices (including Firefox)
         window.addEventListener('deviceorientation', handleOrientation);
+        // Firefox fallback
+        window.addEventListener('MozOrientation', handleMozOrientation);
       }
     }
 
@@ -196,59 +225,69 @@ export default function AnimatedBackground() {
       const time = timeRef.current;
 
       // Wave equations - right to left motion with topographical feel
-      // Reduced wave complexity on mobile for better performance
+      // On mobile: use parallax effect instead of waves
       for (let i = 0; i < points.length; i++) {
         const point = points[i];
 
-        // Calculate vertical position factor (0 to 1 from top to bottom)
-        const verticalFactor = point.baseY / height;
+        if (isMobile) {
+          // Mobile: Parallax depth effect based on position
+          // Create depth layers based on position
+          const depthFactor = (point.baseY / height) * 0.5 + (point.baseX / width) * 0.5;
 
-        // Create wave bands that only affect certain vertical regions
-        // Top band (0 to 0.3) - strong waves
-        const topBandStrength = Math.max(0, 1 - (verticalFactor / 0.3));
+          // Apply parallax offset based on gyroscope
+          const parallaxZ = depthFactor * (parallaxOffset.x + parallaxOffset.y) * 2;
 
-        // Middle band (0.3 to 0.7) - medium waves
-        const midBandStrength = verticalFactor > 0.3 && verticalFactor < 0.7
-          ? 1 - Math.abs((verticalFactor - 0.5) / 0.2)
-          : 0;
+          point.z = parallaxZ;
+        } else {
+          // Desktop: Wave animation
+          // Calculate vertical position factor (0 to 1 from top to bottom)
+          const verticalFactor = point.baseY / height;
 
-        // Bottom band (0.7 to 1.0) - light waves
-        const bottomBandStrength = Math.max(0, (verticalFactor - 0.7) / 0.3);
+          // Create wave bands that only affect certain vertical regions
+          // Top band (0 to 0.3) - strong waves
+          const topBandStrength = Math.max(0, 1 - (verticalFactor / 0.3));
 
-        // Mouse/Gyroscope interaction effect - gravity pull
-        let mouseInfluence = 0;
-        const interactionSource = isMobile ? gyroRef.current : mouseRef.current;
+          // Middle band (0.3 to 0.7) - medium waves
+          const midBandStrength = verticalFactor > 0.3 && verticalFactor < 0.7
+            ? 1 - Math.abs((verticalFactor - 0.5) / 0.2)
+            : 0;
 
-        if (interactionSource.isActive) {
-          const dx = point.baseX - interactionSource.x;
-          const dy = point.baseY - interactionSource.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 250; // Influence radius
+          // Bottom band (0.7 to 1.0) - light waves
+          const bottomBandStrength = Math.max(0, (verticalFactor - 0.7) / 0.3);
 
-          if (distance < maxDistance) {
-            // Inverse square falloff for gravity-like effect
-            const influence = Math.pow(1 - (distance / maxDistance), 2);
-            // Pull particles up (positive z-value) based on proximity
-            mouseInfluence = influence * 60; // Strong pull effect
+          // Mouse interaction effect - gravity pull
+          let mouseInfluence = 0;
+          if (mouseRef.current.isActive) {
+            const dx = point.baseX - mouseRef.current.x;
+            const dy = point.baseY - mouseRef.current.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDistance = 250; // Influence radius
+
+            if (distance < maxDistance) {
+              // Inverse square falloff for gravity-like effect
+              const influence = Math.pow(1 - (distance / maxDistance), 2);
+              // Pull particles up (positive z-value) based on proximity
+              mouseInfluence = influence * 60; // Strong pull effect
+            }
           }
+
+          // Primary horizontal wave - moving right to left (positive time direction)
+          const wave1 = Math.sin(point.baseX * 0.012 + time * 2.2) * 35 * topBandStrength;
+
+          // Diagonal wave from top-right to bottom-left (middle region)
+          const wave2 = Math.sin((point.baseX * 0.009 - point.baseY * 0.004) + time * 1.8) * 28 * midBandStrength;
+
+          // Diagonal wave from bottom-right to top-left (bottom region)
+          const wave3 = Math.cos((point.baseX * 0.008 + point.baseY * 0.006) + time * 1.4) * 20 * bottomBandStrength;
+
+          // Complex angled wave - varying angles from right side
+          const wave4 = Math.sin((point.baseX * 0.01 + point.baseY * 0.003) + time * 2.0) * 25 * (topBandStrength * 0.5 + midBandStrength * 0.5);
+
+          // Additional wave with different angle for more variation
+          const wave5 = Math.sin((point.baseX * 0.006 + point.baseY * 0.008) - time * 1.6) * 15 * bottomBandStrength;
+
+          point.z = wave1 + wave2 + wave3 + wave4 + wave5 + mouseInfluence;
         }
-
-        // Primary horizontal wave - moving right to left (positive time direction)
-        const wave1 = Math.sin(point.baseX * 0.012 + time * 2.2) * 35 * topBandStrength;
-
-        // Diagonal wave from top-right to bottom-left (middle region)
-        const wave2 = Math.sin((point.baseX * 0.009 - point.baseY * 0.004) + time * 1.8) * 28 * midBandStrength;
-
-        // Diagonal wave from bottom-right to top-left (bottom region)
-        const wave3 = Math.cos((point.baseX * 0.008 + point.baseY * 0.006) + time * 1.4) * 20 * bottomBandStrength;
-
-        // Complex angled wave - varying angles from right side (skip on low-end mobile)
-        const wave4 = (isMobile && isLowEnd) ? 0 : Math.sin((point.baseX * 0.01 + point.baseY * 0.003) + time * 2.0) * 25 * (topBandStrength * 0.5 + midBandStrength * 0.5);
-
-        // Additional wave with different angle for more variation
-        const wave5 = Math.sin((point.baseX * 0.006 + point.baseY * 0.008) - time * 1.6) * 15 * bottomBandStrength;
-
-        point.z = wave1 + wave2 + wave3 + wave4 + wave5 + mouseInfluence;
       }
 
       // Render particles - optimized
@@ -309,6 +348,7 @@ export default function AnimatedBackground() {
         window.removeEventListener('mouseleave', handleMouseLeave);
       } else {
         window.removeEventListener('deviceorientation', handleOrientation);
+        window.removeEventListener('MozOrientation', handleMozOrientation);
       }
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);

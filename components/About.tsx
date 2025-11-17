@@ -6,7 +6,7 @@ import { fadeInVariants } from "@/lib/animations";
 
 export default function About() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.1 });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   // Mouse position for 3D effect
   const mouseX = useMotionValue(0);
@@ -51,9 +51,21 @@ export default function About() {
       if (e.beta !== null && e.gamma !== null) {
         // beta: front-back tilt (-180 to 180)
         // gamma: left-right tilt (-90 to 90)
-        // Normalize to -0.5 to 0.5 range
-        const normalizedX = Math.max(-0.5, Math.min(0.5, e.gamma / 90));
-        const normalizedY = Math.max(-0.5, Math.min(0.5, (e.beta - 90) / 90));
+        // Normalize to -0.5 to 0.5 range for parallax effect
+        const normalizedX = Math.max(-0.5, Math.min(0.5, e.gamma / 45)); // Narrower range for subtler effect
+        const normalizedY = Math.max(-0.5, Math.min(0.5, (e.beta - 90) / 45));
+
+        mouseX.set(normalizedX);
+        mouseY.set(normalizedY);
+      }
+    };
+
+    // Firefox MozOrientation event (older Android Firefox)
+    const handleMozOrientation = (e: any) => {
+      if (e.x !== null && e.y !== null) {
+        // x and y are in -1 to 1 range
+        const normalizedX = Math.max(-0.5, Math.min(0.5, e.y * 0.5)); // y controls left-right
+        const normalizedY = Math.max(-0.5, Math.min(0.5, e.x * 0.5)); // x controls up-down
 
         mouseX.set(normalizedX);
         mouseY.set(normalizedY);
@@ -70,12 +82,15 @@ export default function About() {
         })
         .catch(console.error);
     } else {
-      // Non-iOS devices
+      // Non-iOS devices (including Firefox)
       window.addEventListener('deviceorientation', handleOrientation);
+      // Firefox fallback
+      window.addEventListener('MozOrientation', handleMozOrientation);
     }
 
     return () => {
       window.removeEventListener('deviceorientation', handleOrientation);
+      window.removeEventListener('MozOrientation', handleMozOrientation);
     };
   }, [isMobile, mouseX, mouseY]);
 
@@ -138,26 +153,48 @@ export default function About() {
             </motion.div>
 
             {/* About Me Text */}
-            <div className="space-y-6">
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-text">
+            <motion.div
+              className="space-y-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <motion.h2
+                className="text-4xl md:text-5xl font-display font-bold text-text"
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
                 About Me
-              </h2>
+              </motion.h2>
 
               <div className="space-y-4 text-text/80 text-lg leading-relaxed">
-                <p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
                     Welcome to my corner of the internet. I'm an experienced software engineer who tricks rocks into thinking, whether those rocks support data pipelines, API's, or visual end user experiences.
-                </p>
+                </motion.p>
 
-                <p>
-                  Growing up, I always dreamed of being on the -puter. Whether that was through annoying Clippy on Windows Vista, losing myself in Adventure Quest and Maplestory, or trying to find the <i>perfect</i> font family for my school PowerPoint, I figured myself a digital aficionado.
-                </p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                >
+                  Growing up, I always dreamed of being on the computer. Whether that was through annoying Clippy on Windows Vista, losing myself in Adventure Quest and Maplestory, or trying to find the <i>perfect</i> font family for my school PowerPoint, I figured myself a digital aficionado.
+                </motion.p>
 
-                <p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                >
                   But I didn't know that coding would be my career until I took Mr. Blattner's <i>Intro to Java Programming</i> class in high school. I didn't even know it paid well, I just knew I had to do it for the rest of my life.
-                </p>
+                </motion.p>
 
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Right side: When I'm not coding */}
