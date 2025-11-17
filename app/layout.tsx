@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Franklin, Space_Grotesk, Oxanium } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import { Analytics } from "@vercel/analytics/react";
 
 const libreFranklin = Libre_Franklin({
   subsets: ["latin"],
@@ -60,6 +61,7 @@ export default function RootLayout({
       <body className="font-sans bg-dark">
         <Navigation />
         <main>{children}</main>
+        <Analytics />
       </body>
     </html>
   );
