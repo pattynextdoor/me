@@ -23,7 +23,6 @@ export default function AnimatedBackground() {
   const timeRef = useRef(0);
   const rafRef = useRef<number | undefined>(undefined);
   const mouseRef = useRef({ x: 0, y: 0, isActive: false });
-  const gyroRef = useRef({ x: 0, y: 0, isActive: false });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,9 +35,6 @@ export default function AnimatedBackground() {
     let height = window.innerHeight;
     let isMobile = width < 768; // Mobile breakpoint
     let isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
-
-    // Parallax offset for mobile gyroscope
-    const parallaxOffset = { x: 0, y: 0 };
 
     // Mouse interaction handlers - use window for global tracking
     const handleMouseMove = (e: MouseEvent) => {
@@ -53,101 +49,10 @@ export default function AnimatedBackground() {
       mouseRef.current.isActive = false;
     };
 
-    let gyroscope: any = null;
-
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (e.beta !== null && e.gamma !== null) {
-        // beta: front-back tilt (-180 to 180)
-        // gamma: left-right tilt (-90 to 90)
-
-        // For parallax effect, normalize to -1 to 1 range
-        const normalizedGamma = Math.max(-1, Math.min(1, e.gamma / 45)); // -45 to 45 degrees
-        const normalizedBeta = Math.max(-1, Math.min(1, (e.beta - 90) / 45)); // 45 to 135 degrees (centered at 90)
-
-        // Set parallax offset (multiplied by factor in render)
-        parallaxOffset.x = normalizedGamma * 30; // Max 30px offset
-        parallaxOffset.y = normalizedBeta * 30; // Max 30px offset
-
-        gyroRef.current = {
-          x: width / 2 + normalizedGamma * width * 0.2,
-          y: height / 2 + normalizedBeta * height * 0.2,
-          isActive: true
-        };
-      }
-    };
-
-    const handleMozOrientation = (e: any) => {
-      if (e.x !== null && e.y !== null) {
-        // x and y are in -1 to 1 range
-        const normalizedGamma = Math.max(-1, Math.min(1, e.y)); // y controls left-right
-        const normalizedBeta = Math.max(-1, Math.min(1, e.x)); // x controls up-down
-
-        // Set parallax offset
-        parallaxOffset.x = normalizedGamma * 30;
-        parallaxOffset.y = normalizedBeta * 30;
-
-        gyroRef.current = {
-          x: width / 2 + normalizedGamma * width * 0.2,
-          y: height / 2 + normalizedBeta * height * 0.2,
-          isActive: true
-        };
-      }
-    };
-
     // Add mouse event listeners to window for better tracking
     if (!isMobile) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseleave', handleMouseLeave);
-    } else {
-      // Try modern Gyroscope API first (Firefox, Chrome)
-      let fallbackActive = false;
-
-      if ('Gyroscope' in window) {
-        try {
-          gyroscope = new (window as any).Gyroscope({ frequency: 60 });
-
-          gyroscope.addEventListener('reading', () => {
-            // Gyroscope gives rotation rates in rad/s
-            const sensitivity = 0.05;
-            const normalizedGamma = Math.max(-1, Math.min(1, gyroscope.y * sensitivity));
-            const normalizedBeta = Math.max(-1, Math.min(1, gyroscope.x * sensitivity));
-
-            parallaxOffset.x = normalizedGamma * 30;
-            parallaxOffset.y = normalizedBeta * 30;
-
-            gyroRef.current = {
-              x: width / 2 + normalizedGamma * width * 0.2,
-              y: height / 2 + normalizedBeta * height * 0.2,
-              isActive: true
-            };
-          });
-
-          gyroscope.start();
-        } catch (error) {
-          console.log('Gyroscope API failed, falling back to DeviceOrientation');
-          fallbackActive = true;
-        }
-      } else {
-        fallbackActive = true;
-      }
-
-      // Fallback to DeviceOrientation API
-      if (fallbackActive) {
-        if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-          // iOS 13+ requires permission
-          (DeviceOrientationEvent as any).requestPermission()
-            .then((permissionState: string) => {
-              if (permissionState === 'granted') {
-                window.addEventListener('deviceorientation', handleOrientation);
-              }
-            })
-            .catch(console.error);
-        } else {
-          // Non-iOS devices
-          window.addEventListener('deviceorientation', handleOrientation);
-          window.addEventListener('MozOrientation', handleMozOrientation);
-        }
-      }
     }
 
     // Setup canvas
@@ -259,69 +164,56 @@ export default function AnimatedBackground() {
       const time = timeRef.current;
 
       // Wave equations - right to left motion with topographical feel
-      // On mobile: use parallax effect instead of waves
       for (let i = 0; i < points.length; i++) {
         const point = points[i];
 
-        if (isMobile) {
-          // Mobile: Parallax depth effect based on position
-          // Create depth layers based on position
-          const depthFactor = (point.baseY / height) * 0.5 + (point.baseX / width) * 0.5;
+        // Calculate vertical position factor (0 to 1 from top to bottom)
+        const verticalFactor = point.baseY / height;
 
-          // Apply parallax offset based on gyroscope
-          const parallaxZ = depthFactor * (parallaxOffset.x + parallaxOffset.y) * 2;
+        // Create wave bands that only affect certain vertical regions
+        // Top band (0 to 0.3) - strong waves
+        const topBandStrength = Math.max(0, 1 - (verticalFactor / 0.3));
 
-          point.z = parallaxZ;
-        } else {
-          // Desktop: Wave animation
-          // Calculate vertical position factor (0 to 1 from top to bottom)
-          const verticalFactor = point.baseY / height;
+        // Middle band (0.3 to 0.7) - medium waves
+        const midBandStrength = verticalFactor > 0.3 && verticalFactor < 0.7
+          ? 1 - Math.abs((verticalFactor - 0.5) / 0.2)
+          : 0;
 
-          // Create wave bands that only affect certain vertical regions
-          // Top band (0 to 0.3) - strong waves
-          const topBandStrength = Math.max(0, 1 - (verticalFactor / 0.3));
+        // Bottom band (0.7 to 1.0) - light waves
+        const bottomBandStrength = Math.max(0, (verticalFactor - 0.7) / 0.3);
 
-          // Middle band (0.3 to 0.7) - medium waves
-          const midBandStrength = verticalFactor > 0.3 && verticalFactor < 0.7
-            ? 1 - Math.abs((verticalFactor - 0.5) / 0.2)
-            : 0;
+        // Mouse interaction effect - gravity pull (desktop only)
+        let mouseInfluence = 0;
+        if (!isMobile && mouseRef.current.isActive) {
+          const dx = point.baseX - mouseRef.current.x;
+          const dy = point.baseY - mouseRef.current.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const maxDistance = 250; // Influence radius
 
-          // Bottom band (0.7 to 1.0) - light waves
-          const bottomBandStrength = Math.max(0, (verticalFactor - 0.7) / 0.3);
-
-          // Mouse interaction effect - gravity pull
-          let mouseInfluence = 0;
-          if (mouseRef.current.isActive) {
-            const dx = point.baseX - mouseRef.current.x;
-            const dy = point.baseY - mouseRef.current.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const maxDistance = 250; // Influence radius
-
-            if (distance < maxDistance) {
-              // Inverse square falloff for gravity-like effect
-              const influence = Math.pow(1 - (distance / maxDistance), 2);
-              // Pull particles up (positive z-value) based on proximity
-              mouseInfluence = influence * 60; // Strong pull effect
-            }
+          if (distance < maxDistance) {
+            // Inverse square falloff for gravity-like effect
+            const influence = Math.pow(1 - (distance / maxDistance), 2);
+            // Pull particles up (positive z-value) based on proximity
+            mouseInfluence = influence * 60; // Strong pull effect
           }
-
-          // Primary horizontal wave - moving right to left (positive time direction)
-          const wave1 = Math.sin(point.baseX * 0.012 + time * 2.2) * 35 * topBandStrength;
-
-          // Diagonal wave from top-right to bottom-left (middle region)
-          const wave2 = Math.sin((point.baseX * 0.009 - point.baseY * 0.004) + time * 1.8) * 28 * midBandStrength;
-
-          // Diagonal wave from bottom-right to top-left (bottom region)
-          const wave3 = Math.cos((point.baseX * 0.008 + point.baseY * 0.006) + time * 1.4) * 20 * bottomBandStrength;
-
-          // Complex angled wave - varying angles from right side
-          const wave4 = Math.sin((point.baseX * 0.01 + point.baseY * 0.003) + time * 2.0) * 25 * (topBandStrength * 0.5 + midBandStrength * 0.5);
-
-          // Additional wave with different angle for more variation
-          const wave5 = Math.sin((point.baseX * 0.006 + point.baseY * 0.008) - time * 1.6) * 15 * bottomBandStrength;
-
-          point.z = wave1 + wave2 + wave3 + wave4 + wave5 + mouseInfluence;
         }
+
+        // Primary horizontal wave - moving right to left (positive time direction)
+        const wave1 = Math.sin(point.baseX * 0.012 + time * 2.2) * 35 * topBandStrength;
+
+        // Diagonal wave from top-right to bottom-left (middle region)
+        const wave2 = Math.sin((point.baseX * 0.009 - point.baseY * 0.004) + time * 1.8) * 28 * midBandStrength;
+
+        // Diagonal wave from bottom-right to top-left (bottom region)
+        const wave3 = Math.cos((point.baseX * 0.008 + point.baseY * 0.006) + time * 1.4) * 20 * bottomBandStrength;
+
+        // Complex angled wave - varying angles from right side
+        const wave4 = Math.sin((point.baseX * 0.01 + point.baseY * 0.003) + time * 2.0) * 25 * (topBandStrength * 0.5 + midBandStrength * 0.5);
+
+        // Additional wave with different angle for more variation
+        const wave5 = Math.sin((point.baseX * 0.006 + point.baseY * 0.008) - time * 1.6) * 15 * bottomBandStrength;
+
+        point.z = wave1 + wave2 + wave3 + wave4 + wave5 + mouseInfluence;
       }
 
       // Render particles - optimized
@@ -380,12 +272,6 @@ export default function AnimatedBackground() {
       if (!isMobile) {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseleave', handleMouseLeave);
-      } else {
-        if (gyroscope) {
-          gyroscope.stop();
-        }
-        window.removeEventListener('deviceorientation', handleOrientation);
-        window.removeEventListener('MozOrientation', handleMozOrientation);
       }
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);

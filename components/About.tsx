@@ -47,9 +47,6 @@ export default function About() {
   useEffect(() => {
     if (!isMobile) return;
 
-    let gyroscope: any = null;
-    let fallbackActive = false;
-
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta !== null && e.gamma !== null) {
         // beta: front-back tilt (-180 to 180)
@@ -63,66 +60,23 @@ export default function About() {
       }
     };
 
-    const handleMozOrientation = (e: any) => {
-      if (e.x !== null && e.y !== null) {
-        // x and y are in -1 to 1 range
-        const normalizedX = Math.max(-0.5, Math.min(0.5, e.y * 0.5)); // y controls left-right
-        const normalizedY = Math.max(-0.5, Math.min(0.5, e.x * 0.5)); // x controls up-down
-
-        mouseX.set(normalizedX);
-        mouseY.set(normalizedY);
-      }
-    };
-
-    // Try modern Gyroscope API first (Firefox, Chrome)
-    if ('Gyroscope' in window) {
-      try {
-        gyroscope = new (window as any).Gyroscope({ frequency: 60 });
-
-        gyroscope.addEventListener('reading', () => {
-          // Gyroscope gives rotation rates in rad/s
-          // Integrate to get approximate angles (simplified approach)
-          const sensitivity = 0.05;
-          const normalizedX = Math.max(-0.5, Math.min(0.5, gyroscope.y * sensitivity));
-          const normalizedY = Math.max(-0.5, Math.min(0.5, gyroscope.x * sensitivity));
-
-          mouseX.set(normalizedX);
-          mouseY.set(normalizedY);
-        });
-
-        gyroscope.start();
-      } catch (error) {
-        console.log('Gyroscope API failed, falling back to DeviceOrientation');
-        fallbackActive = true;
-      }
+    // Use DeviceOrientation API (most compatible on mobile)
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+      // iOS 13+ requires permission
+      (DeviceOrientationEvent as any).requestPermission()
+        .then((permissionState: string) => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation, true);
+          }
+        })
+        .catch(console.error);
     } else {
-      fallbackActive = true;
-    }
-
-    // Fallback to DeviceOrientation API
-    if (fallbackActive) {
-      if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
-        // iOS 13+ requires permission
-        (DeviceOrientationEvent as any).requestPermission()
-          .then((permissionState: string) => {
-            if (permissionState === 'granted') {
-              window.addEventListener('deviceorientation', handleOrientation);
-            }
-          })
-          .catch(console.error);
-      } else {
-        // Non-iOS devices
-        window.addEventListener('deviceorientation', handleOrientation);
-        window.addEventListener('MozOrientation', handleMozOrientation);
-      }
+      // Non-iOS devices or older iOS
+      window.addEventListener('deviceorientation', handleOrientation, true);
     }
 
     return () => {
-      if (gyroscope) {
-        gyroscope.stop();
-      }
-      window.removeEventListener('deviceorientation', handleOrientation);
-      window.removeEventListener('MozOrientation', handleMozOrientation);
+      window.removeEventListener('deviceorientation', handleOrientation, true);
     };
   }, [isMobile, mouseX, mouseY]);
 
