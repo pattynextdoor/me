@@ -188,15 +188,17 @@ export default function Navigation() {
                   </motion.a>
                 ))}
                 <motion.a
-                  href="/resume.pdf"
-                  download
-                  className="px-4 py-4 mt-2 bg-accent text-white rounded-xl font-medium text-center hover:bg-accent/90 transition-colors duration-200"
+                  href="https://linkedin.com/in/patricktumbucon"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-4 mt-2 text-white rounded-xl font-medium text-center transition-colors duration-200"
+                  style={{ backgroundColor: 'rgb(190, 49, 68)' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: links.length * 0.05 }}
                 >
-                  Download Resume
+                  LinkedIn
                 </motion.a>
               </div>
             </motion.div>
