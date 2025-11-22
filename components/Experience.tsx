@@ -12,6 +12,7 @@ interface ExperienceItem {
   company: string;
   role: string;
   description: string[];
+  focusAreas: string[];
   icon: JSX.Element;
 }
 
@@ -79,6 +80,35 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
                 </motion.p>
               ))}
             </div>
+
+            {/* Focus Areas */}
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <div className="text-sm font-medium text-gray-500 mb-3 uppercase tracking-wide">
+                Focus Areas
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {exp.focusAreas.map((area, aIndex) => (
+                  <motion.span
+                    key={area}
+                    className="chip"
+                    initial={{ opacity: 0, y: 6 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+                    transition={{ duration: 0.35, delay: 0.45 + aIndex * 0.05 }}
+                    aria-label={`Focus area: ${area}`}
+                  >
+                    <span className="chip-dot" />
+                    {area}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -95,6 +125,16 @@ const experiences: ExperienceItem[] = [
       "I've been building premium features across the stack to support Entra ID Admins with keeping their organizations secure. Identity Governance is the framework for managing and securing identities (whether user, app or agent) and their access to resources. My extended tenure in Identity has allowed me to form deep understandings of our Governance products and exercise my opinionated views in my work.",
       "This role has been a mix of deep technical work, cross-team collaboration, mentoring juniors and interns, and finding creative solutions to supporting new identities. "
     ],
+    focusAreas: [
+      "Cross-functional Leadership",
+      "Distributed Systems",
+      "Mentoring",
+      "Azure",
+      "React",
+      "Typescript",
+      "C#",
+      "Scala"
+    ],
     icon: <VscAzure size={40} />,
   },
   {
@@ -105,6 +145,18 @@ const experiences: ExperienceItem[] = [
       "I built ML-powered systems which identified seller risk in support of EU anti-money laundering and counter terrorist financing initiatives. Doing so as a junior engineer under Amazon's scale was a challenge, but allowed me to develop good habits that I still apply through my career.",
       "One thing about starting your career at Amazon - you learn at the speed of light. 🧑‍🚀"
     ],
+    focusAreas: [
+      "Performance Optimization",
+      "Distributed Systems",
+      "Data Cleaning",
+      "AWS",
+      "DevOps",
+      "Java",
+      "Scala",
+      "React",
+      "Typescript",
+      "Python"
+    ],
     icon: <SiAmazon size={40} />,
   },
   {
@@ -113,7 +165,12 @@ const experiences: ExperienceItem[] = [
     role: "Technical SEO Intern",
     description: [
       "I worked on optimizing SEO for many of Esri's landing sites. Through following SEO best practices, I was able to collaborate with developers to implement structured data.",
-      "Some days I miss being an intern..."
+      "This was a fun opportunity to dip my toes into working in an office for the first time."
+    ],
+    focusAreas: [
+      "Technical SEO",
+      "Structured Data",
+      "Eating snacks"
     ],
     icon: <FaGlobe size={40} />,
   },

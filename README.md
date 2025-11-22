@@ -30,17 +30,21 @@ npm install
 ### Development
 
 ```bash
-npm run dev
+npx next dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view in your browser.
 
+> Tip: If you prefer npm scripts, `npm run dev` is an alias for the same command.
+
 ### Build
 
 ```bash
-npm run build
-npm start
+npx next build
+npx next start
 ```
+
+> Tip: If you prefer npm scripts, `npm run build && npm start` does the same.
 
 ## Customization
 
