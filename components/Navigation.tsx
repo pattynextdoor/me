@@ -33,6 +33,7 @@ export default function Navigation() {
   const backdropBlur = useTransform(scrollY, [0, 50], ["blur(0px)", "blur(20px)"]);
 
   const links = [
+    { href: "/blog", label: "Blog" },
     { href: "#about", label: "About Me" },
     { href: "#experience", label: "Experience" },
     { href: '#contact', label: "Contact" }
