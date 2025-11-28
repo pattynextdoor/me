@@ -128,14 +128,19 @@ export const MDXComponents = {
       </Link>
     );
   },
-  img: ({ className, ...props }: ComponentProps<"img">) => (
-    <Image
-      src={props.src ?? ""}
-      alt={props.alt ?? ""}
-      width={1200}
-      height={630}
-      className={cx("rounded-lg border border-border/40", className)}
-    />
-  ),
+  img: ({ className, ...props }: ComponentProps<"img">) => {
+    const src = typeof props.src === "string" ? props.src : "";
+    const alt = typeof props.alt === "string" ? props.alt : "";
+
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={1200}
+        height={630}
+        className={cx("rounded-lg border border-border/40", className)}
+      />
+    );
+  },
   Callout,
 };

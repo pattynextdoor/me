@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogIndex() {
-  const { isEnabled } = draftMode();
+  const { isEnabled } = await draftMode();
   const posts = getAllPosts({ includeDrafts: isEnabled });
 
   return (
