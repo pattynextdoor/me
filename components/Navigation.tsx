@@ -33,10 +33,9 @@ export default function Navigation() {
   const backdropBlur = useTransform(scrollY, [0, 50], ["blur(0px)", "blur(20px)"]);
 
   const links = [
-    { href: "/blog", label: "Blog" },
-    { href: "#about", label: "About Me" },
-    { href: "#experience", label: "Experience" },
-    { href: '#contact', label: "Contact" }
+    { href: "/#about", label: "About Me" },
+    { href: "/#experience", label: "Experience" },
+    { href: "/#contact", label: "Contact" }
   ];
 
   return (
@@ -57,7 +56,7 @@ export default function Navigation() {
         >
           <div className="flex items-center justify-between gap-4">
             <motion.a
-              href="#"
+              href="/"
               className="text-xl font-display font-semibold transition-colors duration-500 flex-shrink-0"
               style={{
                 color: isLightSection && isScrolled ? "#0B192C" : "#D9D9D9",
@@ -90,15 +89,14 @@ export default function Navigation() {
                 </motion.a>
               ))}
               <motion.a
-                href="https://linkedin.com/in/patricktumbucon"
+                href="/blog"
                 className="px-4 py-2 text-white rounded-lg font-medium"
                 style={{ backgroundColor: 'rgb(190, 49, 68)' }}
                 whileHover={{ scale: 1.05, backgroundColor: 'rgb(210, 69, 88)' }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                target="_blank"
               >
-                LinkedIn
+                Blog
               </motion.a>
             </div>
 
@@ -189,9 +187,7 @@ export default function Navigation() {
                   </motion.a>
                 ))}
                 <motion.a
-                  href="https://linkedin.com/in/patricktumbucon"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/blog"
                   className="px-4 py-4 mt-2 text-white rounded-xl font-medium text-center transition-colors duration-200"
                   style={{ backgroundColor: 'rgb(190, 49, 68)' }}
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -199,7 +195,7 @@ export default function Navigation() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: links.length * 0.05 }}
                 >
-                  LinkedIn
+                  Blog
                 </motion.a>
               </div>
             </motion.div>
