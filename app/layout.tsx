@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   title: "Patrick Tumbucon",
   description: "Personal portfolio of Patrick Tumbucon",
   keywords: ["Patrick Tumbucon", "Software Engineer", "Microsoft", "Identity Governance", "Portfolio"],
+  metadataBase: new URL("https://patricktumbucon.com"),
   openGraph: {
     title: "Patrick Tumbucon - Software Engineer",
     description: "Personal portfolio of Patrick Tumbucon, Identity Governance Software Engineer at Microsoft",
