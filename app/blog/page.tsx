@@ -13,7 +13,7 @@ export default async function BlogIndex() {
   const posts = getAllPosts({ includeDrafts: isEnabled });
 
   return (
-    <section className="max-w-3xl mx-auto px-4 py-16">
+    <section className="max-w-3xl mx-auto px-4 pt-28 pb-16">
       <h1 className="text-3xl font-bold mb-6">Blog</h1>
       {posts.length === 0 ? (
         <p className="text-text/70">No posts yet.</p>
