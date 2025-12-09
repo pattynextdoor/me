@@ -35,7 +35,8 @@ export default function Navigation() {
   const links = [
     { href: "/#about", label: "About Me" },
     { href: "/#experience", label: "Experience" },
-    { href: "/#contact", label: "Contact" }
+    { href: "/#projects", label: "Projects" },
+    { href: "/#contact", label: "Contact" },
   ];
 
   return (

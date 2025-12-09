@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
+import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <div style={{ background: 'linear-gradient(to bottom, #0b1829, #0b1829)' }}>
         <About />
         <Experience />
+        <Projects />
       </div>
       <Contact />
     </>
