@@ -6,12 +6,13 @@ import { fadeInVariants } from "@/lib/animations";
 import { SiAmazon } from "react-icons/si";
 import { VscAzure } from "react-icons/vsc";
 import { FaGlobe } from "react-icons/fa";
+import { ImLibrary } from "react-icons/im";
 
 interface ExperienceItem {
   number: string;
   company: string;
   role: string;
-  description: string[];
+  description: (string | JSX.Element)[];
   focusAreas: string[];
   icon: JSX.Element;
 }
@@ -47,9 +48,9 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             {/* Company & Role */}
-            <div className="flex items-start gap-4">
+            <div className="flex items-center gap-5 md:gap-6">
               <div
-                className="text-gray-700 mt-1 flex-shrink-0"
+                className="text-gray-700 flex-shrink-0 flex items-center justify-center leading-none"
                 style={{
                   willChange: 'auto',
                   transform: 'translateZ(0)',
@@ -118,7 +119,35 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
 
 const experiences: ExperienceItem[] = [
   {
-    number: "2021 - Present",
+    number: "2026",
+    company: "Guild",
+    role: "Senior Software Engineer - Full-Stack",
+    description: [
+      <>
+        Starting February 2026, I'll be joining{" "}
+        <a
+          href="https://guild.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-900 font-medium underline hover:text-gray-700 transition-colors"
+        >
+          Guild
+        </a>{" "}
+        as a Senior Software Engineer, working in a full-stack capacity to help build solutions that enable career mobility for America's workforce.
+      </>,
+      <>
+        I'm excited to bring my experience in distributed systems and cross-functional collaboration to Guild's mission of making education and career advancement accessible to working adults.
+      </>,
+    ],
+    focusAreas: [
+      "Full-Stack Development",
+      "Distributed Systems",
+      "Cross-functional Collaboration"
+    ],
+    icon: <ImLibrary size={40} />,
+  },
+  {
+    number: "2021 - 2025",
     company: "Microsoft Azure",
     role: "Software Engineer II - Identity Governance",
     description: [
@@ -164,7 +193,18 @@ const experiences: ExperienceItem[] = [
     company: "Esri",
     role: "Technical SEO Intern",
     description: [
-      "I worked on optimizing SEO for many of Esri's landing sites. Through following SEO best practices, I was able to collaborate with developers to implement structured data.",
+      <>
+        I worked on optimizing SEO for many of{" "}
+        <a
+          href="https://esri.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-900 font-medium underline hover:text-gray-700 transition-colors"
+        >
+          Esri
+        </a>
+        's landing sites. Through following SEO best practices, I was able to collaborate with developers to implement structured data.
+      </>,
       "This was a fun opportunity to dip my toes into working in an office for the first time."
     ],
     focusAreas: [
@@ -234,6 +274,7 @@ export default function Experience() {
           <h2 className="text-5xl md:text-6xl font-display font-bold text-gray-900">
             Experience
           </h2>
+          <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
         </motion.div>
 
         {/* Experience items */}

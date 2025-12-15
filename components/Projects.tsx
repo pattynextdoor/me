@@ -164,7 +164,7 @@ export default function Projects() {
     >
       <div className="max-w-[1400px] mx-auto w-full">
         <motion.div
-          className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-8 relative z-10"
+          className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
           variants={fadeInVariants}
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
