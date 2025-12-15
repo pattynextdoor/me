@@ -46,7 +46,7 @@ export default function Contact() {
               Get In Touch
             </h2>
             <p className="text-xl text-text/70 max-w-2xl mx-auto text-balance">
-              Hit me up if want to show me a cool gig, discuss freshwater aquascapes, or fight me in Guilty Gear Strive.
+              Hit me up if want to show me a cool gig or teach me something new.
             </p>
           </div>
 

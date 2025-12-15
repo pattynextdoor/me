@@ -176,6 +176,7 @@ export default function Projects() {
             <h2 className="text-5xl md:text-6xl font-display font-bold text-gray-900">
               Projects
             </h2>
+            <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
           </div>
           {projects[0]?.blurb && (
             <p className="text-base md:text-lg text-gray-600 max-w-xl">

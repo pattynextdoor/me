@@ -26,11 +26,11 @@ const oxanium = Oxanium({
 export const metadata: Metadata = {
   title: "Patrick Tumbucon",
   description: "Personal portfolio of Patrick Tumbucon",
-  keywords: ["Patrick Tumbucon", "Software Engineer", "Microsoft", "Identity Governance", "Portfolio"],
+  keywords: ["Patrick Tumbucon", "Senior Software Engineer", "Full Stack Developer", "Portfolio"],
   metadataBase: new URL("https://patricktumbucon.com"),
   openGraph: {
     title: "Patrick Tumbucon - Software Engineer",
-    description: "Personal portfolio of Patrick Tumbucon, Identity Governance Software Engineer at Microsoft",
+    description: "Patrick Tumbucon\'s personal website",
     url: "https://patricktumbucon.com",
     siteName: "Patrick Tumbucon",
     images: [
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Patrick Tumbucon - Software Engineer",
-    description: "Personal portfolio of Patrick Tumbucon, Software Engineer",
+    description: "Personal website of Patrick Tumbucon, Software Engineer",
     images: ["/linkPreview.png"],
   },
 };

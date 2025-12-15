@@ -153,6 +153,7 @@ export default function About() {
               >
                 About Me
               </motion.h2>
+              <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
 
               <div className="space-y-4 text-text/80 text-lg leading-relaxed">
                 <motion.p
