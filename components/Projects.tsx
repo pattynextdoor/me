@@ -19,6 +19,24 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: "meeting-mind",
+    name: "MeetingMind",
+    tagline: "Transform meeting transcripts into connected knowledge",
+    description:
+      "An Obsidian plugin that bridges the gap between meeting recordings and personal knowledge management. It automatically imports transcripts with AI-powered summaries, action items, and intelligent linking to your existing notes.",
+    tags: [
+      "Obsidian API",
+      "TypeScript",
+      "OpenAI / Claude",
+      "React",
+    ],
+    background: "#F3F4F6",
+    href: "https://github.com/pattynextdoor/meetingmind",
+    image: "/meeting-mind.mp4",
+    imageAlt: "MeetingMind Obsidian plugin demo",
+    blurb: "MeetingMind turns the chaos of meeting transcripts into structured, interconnected knowledge within your second brain.",
+  },
+  {
     id: "stocking-fish",
     name: "Stocking Fish",
     tagline: "Your virtual aquarium planner",
@@ -56,7 +74,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-stretch">
         {/* Meta */}
         <div className="md:col-span-4 flex flex-col gap-4">
-          <div className="text-sm font-mono text-gray-500">01</div>
+          <div className="text-sm font-mono text-gray-500">
+            {(index + 1).toString().padStart(2, '0')}
+          </div>
+          {project.blurb && (
+            <p className="text-lg font-medium text-gray-900 max-w-xs leading-snug">
+              {project.blurb}
+            </p>
+          )}
           <p className="text-sm text-gray-600 max-w-xs">
             {project.description}
           </p>
@@ -178,11 +203,10 @@ export default function Projects() {
             </h2>
             <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
           </div>
-          {projects[0]?.blurb && (
-            <p className="text-base md:text-lg text-gray-600 max-w-xl">
-              {projects[0].blurb}
-            </p>
-          )}
+          <p className="text-base md:text-lg text-gray-600 max-w-xl">
+            My passion projects are where I explore new technologies and solve personal problems.
+            From aquarium planning to knowledge management, I build tools that I actually use.
+          </p>
         </motion.div>
 
         <div className="space-y-6 relative z-10">
