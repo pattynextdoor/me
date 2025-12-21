@@ -31,7 +31,7 @@ const projects: Project[] = [
       "React",
     ],
     background: "#F3F4F6",
-    href: "https://github.com/pattynextdoor/meetingmind",
+    href: "https://meetingmind.me",
     image: "/meeting-mind.mp4",
     imageAlt: "MeetingMind Obsidian plugin demo",
     blurb: "MeetingMind turns the chaos of meeting transcripts into structured, interconnected knowledge within your second brain.",
@@ -111,7 +111,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition={{ duration: 0.3, ease: [0.44, 0, 0.56, 1] }}
           >
             <div
-              className="relative h-[420px] md:h-[480px] lg:h-[520px] rounded-2xl overflow-hidden border border-gray-200 shadow-[0_4px_24px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] transition-shadow duration-300"
+              className="relative h-[420px] md:h-[480px] lg:h-[520px] rounded-2xl overflow-hidden border border-gray-200 shadow-[0_4px_24px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] transition-all duration-300"
               style={{
                 background: project.background,
               }}
