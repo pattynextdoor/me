@@ -31,15 +31,6 @@ export default function Hero() {
             Full Stack Software Engineer
           </motion.h2>
 
-          <motion.p
-            className="text-lg md:text-xl text-text/70 max-w-2xl text-balance"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 1.7 }}
-          >
-           "I don't know, but I'll figure it out."
-          </motion.p>
-
           <motion.div
             className="flex flex-wrap gap-4 pt-4"
             initial={{ opacity: 0, y: 20 }}
