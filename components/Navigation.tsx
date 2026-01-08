@@ -1,36 +1,19 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
 export default function Navigation() {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLightSection, setIsLightSection] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = scrollY.on("change", (latest) => {
       setIsScrolled(latest > 50);
-
-      // Check if we're in the Experience section (light mode area)
-      const experienceSection = document.getElementById("experience");
-      if (experienceSection) {
-        const rect = experienceSection.getBoundingClientRect();
-        // Consider in light section if the section occupies significant viewport
-        setIsLightSection(rect.top < window.innerHeight / 2 && rect.bottom > window.innerHeight / 2);
-      }
     });
     return () => unsubscribe();
   }, [scrollY]);
-
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, 50],
-    ["rgba(30, 30, 30, 0)", isLightSection ? "rgba(232, 230, 221, 0.7)" : "rgba(30, 30, 30, 0.7)"]
-  );
-
-  const backdropBlur = useTransform(scrollY, [0, 50], ["blur(0px)", "blur(20px)"]);
 
   const links = [
     { href: "/#about", label: "About Me" },
@@ -44,9 +27,7 @@ export default function Navigation() {
       <nav className="fixed top-0 left-0 right-0 z-[100] flex justify-center py-6 px-4">
         <div
           className={`px-6 md:px-8 py-4 rounded-full w-full md:w-auto max-w-[calc(100%-2rem)] md:max-w-5xl border backdrop-blur-[32px] transition-colors duration-500 ${
-            isLightSection && isScrolled
-              ? 'bg-white/50 border-black/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.08)]'
-              : isScrolled
+            isScrolled
               ? 'bg-[rgba(11,25,44,0.4)] border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]'
               : 'bg-[rgba(11,25,44,0.3)] border-white/5'
           }`}
@@ -58,10 +39,7 @@ export default function Navigation() {
           <div className="flex items-center justify-between gap-4">
             <motion.a
               href="/"
-              className="text-xl font-display font-semibold transition-colors duration-500 flex-shrink-0"
-              style={{
-                color: isLightSection && isScrolled ? "#0B192C" : "#D9D9D9",
-              }}
+              className="text-xl font-display font-semibold text-text flex-shrink-0"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
@@ -79,10 +57,7 @@ export default function Navigation() {
                     target: "_blank",
                     rel: "noopener noreferrer"
                   })}
-                  className="transition-colors duration-500 hover:text-accent"
-                  style={{
-                    color: isLightSection && isScrolled ? "#4B5563" : "rgba(217, 217, 217, 0.8)",
-                  }}
+                  className="text-text/80 transition-colors duration-300 hover:text-accent"
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.2 }}
                 >
@@ -109,10 +84,7 @@ export default function Navigation() {
               aria-label="Toggle menu"
             >
               <motion.span
-                className="w-full h-0.5 rounded-full transition-colors duration-500"
-                style={{
-                  backgroundColor: isLightSection && isScrolled ? "#0B192C" : "#D9D9D9",
-                }}
+                className="w-full h-0.5 rounded-full bg-text"
                 animate={{
                   rotate: isMobileMenuOpen ? 45 : 0,
                   y: isMobileMenuOpen ? 7 : 0,
@@ -120,20 +92,14 @@ export default function Navigation() {
                 transition={{ duration: 0.2 }}
               />
               <motion.span
-                className="w-full h-0.5 rounded-full transition-colors duration-500"
-                style={{
-                  backgroundColor: isLightSection && isScrolled ? "#0B192C" : "#D9D9D9",
-                }}
+                className="w-full h-0.5 rounded-full bg-text"
                 animate={{
                   opacity: isMobileMenuOpen ? 0 : 1,
                 }}
                 transition={{ duration: 0.2 }}
               />
               <motion.span
-                className="w-full h-0.5 rounded-full transition-colors duration-500"
-                style={{
-                  backgroundColor: isLightSection && isScrolled ? "#0B192C" : "#D9D9D9",
-                }}
+                className="w-full h-0.5 rounded-full bg-text"
                 animate={{
                   rotate: isMobileMenuOpen ? -45 : 0,
                   y: isMobileMenuOpen ? -7 : 0,

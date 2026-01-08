@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
-import { Libre_Franklin, Space_Grotesk, Oxanium } from "next/font/google";
+import { Space_Grotesk, Oxanium, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { Analytics } from "@vercel/analytics/react";
 
-const libreFranklin = Libre_Franklin({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-body",
   display: "swap",
 });
 
 const oxanium = Oxanium({
   subsets: ["latin"],
-  variable: "--font-signature",
+  variable: "--font-display",
   display: "swap",
   weight: ["400", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -58,8 +58,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${libreFranklin.variable} ${spaceGrotesk.variable} ${oxanium.variable}`}>
-      <body className="font-sans bg-dark">
+    <html lang="en" className={`${spaceGrotesk.variable} ${oxanium.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-body bg-dark">
         <Navigation />
         <main>{children}</main>
         <Analytics />

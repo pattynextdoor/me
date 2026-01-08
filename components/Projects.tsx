@@ -74,15 +74,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="py-12 grid md:grid-cols-12 gap-8 md:gap-12 items-stretch">
         {/* Meta */}
         <div className="md:col-span-4 flex flex-col gap-4">
-          <div className="text-sm font-mono text-gray-500">
+          <div className="text-sm font-mono text-text/60">
             {(index + 1).toString().padStart(2, '0')}
           </div>
           {project.blurb && (
-            <p className="text-lg font-medium text-gray-900 max-w-xs leading-snug">
+            <p className="text-lg font-medium text-text max-w-xs leading-snug">
               {project.blurb}
             </p>
           )}
-          <p className="text-sm text-gray-600 max-w-xs">
+          <p className="text-sm text-text/70 max-w-xs">
             {project.description}
           </p>
           <div className="flex flex-wrap gap-2 mt-2">
@@ -105,13 +105,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <div className="md:col-span-8">
           <Wrapper
             href={project.href}
-            className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#E8E6DD] focus-visible:ring-[#0EA5E9] rounded-2xl"
+            className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-primary focus-visible:ring-accent rounded-2xl"
             whileHover={{ y: -4, scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
             transition={{ duration: 0.3, ease: [0.44, 0, 0.56, 1] }}
           >
             <div
-              className="relative h-[420px] md:h-[480px] lg:h-[520px] rounded-2xl overflow-hidden border border-gray-200 shadow-[0_4px_24px_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)] transition-all duration-300"
+              className="relative h-[420px] md:h-[480px] lg:h-[520px] rounded-2xl overflow-hidden border border-border shadow-[0_4px_24px_rgba(0,0,0,0.2)] group-hover:shadow-[0_8px_40px_rgba(0,0,0,0.3)] transition-all duration-300"
               style={{
                 background: project.background,
               }}
@@ -154,13 +154,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               ) : (
                 <div className="flex items-center justify-center h-full px-8 md:px-12">
                   <div className="space-y-4">
-                    <p className="text-xs font-medium tracking-[0.25em] text-gray-500 uppercase">
+                    <p className="text-xs font-medium tracking-[0.25em] text-text/60 uppercase">
                       Selected Project
                     </p>
-                    <h3 className="text-4xl md:text-5xl font-display font-bold text-gray-900">
+                    <h3 className="text-4xl md:text-5xl font-display font-bold text-text">
                       {project.name}
                     </h3>
-                    <p className="text-base md:text-lg text-gray-600 max-w-md leading-relaxed">
+                    <p className="text-base md:text-lg text-text/70 max-w-md leading-relaxed">
                       {project.tagline}
                     </p>
                   </div>
@@ -172,7 +172,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
 
       {/* Divider */}
-      <div className="relative w-full h-px bg-gray-300" />
+      <div className="relative w-full h-px bg-border" />
     </motion.article>
   );
 }
@@ -185,7 +185,7 @@ export default function Projects() {
     <motion.section
       id="projects"
       ref={sectionRef}
-      className="min-h-screen py-28 px-4 md:px-8 lg:px-9 relative overflow-hidden bg-[#E8E6DD]"
+      className="min-h-screen py-28 px-4 md:px-8 lg:px-9 relative overflow-hidden bg-[#0D0A14]"
     >
       <div className="max-w-[1400px] mx-auto w-full">
         <motion.div
@@ -195,15 +195,15 @@ export default function Projects() {
           animate={isInView ? "show" : "hidden"}
         >
           <div>
-            <p className="text-sm font-medium text-gray-600 mb-4">
+            <p className="text-sm font-medium text-text/70 mb-4">
               A snapshot of work beyond production apps.
             </p>
-            <h2 className="text-5xl md:text-6xl font-display font-bold text-gray-900">
+            <h2 className="text-5xl md:text-6xl font-display font-bold text-text">
               Projects
             </h2>
             <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
           </div>
-          <p className="text-base md:text-lg text-gray-600 max-w-xl">
+          <p className="text-base md:text-lg text-text/70 max-w-xl">
             My passion projects are where I explore new technologies and solve personal problems.
             From aquarium planning to knowledge management, I build tools that I actually use.
           </p>

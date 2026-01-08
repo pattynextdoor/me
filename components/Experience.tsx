@@ -31,12 +31,12 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
       transition={{ duration: 0.5 }}
     >
       {/* Decorative line */}
-      <div className="absolute left-0 top-0 w-full h-px bg-gray-300" />
+      <div className="absolute left-0 top-0 w-full h-px bg-border" />
 
       <div className="py-16 grid md:grid-cols-12 gap-8 md:gap-12 items-start">
         {/* Number */}
         <div className="md:col-span-2">
-          <div className="text-sm font-mono text-gray-400">{exp.number}</div>
+          <div className="text-sm font-mono text-text/60">{exp.number}</div>
         </div>
 
         {/* Content */}
@@ -50,7 +50,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
             {/* Company & Role */}
             <div className="flex items-center gap-5 md:gap-6">
               <div
-                className="text-gray-700 flex-shrink-0 flex items-center justify-center leading-none"
+                className="text-text/70 flex-shrink-0 flex items-center justify-center leading-none"
                 style={{
                   willChange: 'auto',
                   transform: 'translateZ(0)',
@@ -60,10 +60,10 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
                 {exp.icon}
               </div>
               <div>
-                <h3 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-2">
+                <h3 className="text-3xl md:text-4xl font-display font-bold text-text mb-2">
                   {exp.company}
                 </h3>
-                <p className="text-base text-gray-600">{exp.role}</p>
+                <p className="text-base text-text/70">{exp.role}</p>
               </div>
             </div>
 
@@ -72,7 +72,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
               {exp.description.map((paragraph, pIndex) => (
                 <motion.p
                   key={pIndex}
-                  className="text-gray-700 text-base leading-relaxed max-w-3xl"
+                  className="text-text/80 text-base leading-relaxed max-w-3xl"
                   initial={{ opacity: 0, y: 10 }}
                   animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                   transition={{ duration: 0.5, delay: 0.3 + pIndex * 0.1 }}
@@ -89,7 +89,7 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
               animate={itemInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div className="text-sm font-medium text-gray-500 mb-3 uppercase tracking-wide">
+              <div className="text-sm font-medium text-text/60 mb-3 uppercase tracking-wide">
                 Focus Areas
               </div>
               <div className="flex flex-wrap gap-2">
@@ -129,7 +129,7 @@ const experiences: ExperienceItem[] = [
           href="https://guild.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-900 font-medium underline hover:text-gray-700 transition-colors"
+          className="text-accent font-medium underline hover:text-accent/80 transition-colors"
         >
           Guild
         </a>{" "}
@@ -199,7 +199,7 @@ const experiences: ExperienceItem[] = [
           href="https://esri.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-900 font-medium underline hover:text-gray-700 transition-colors"
+          className="text-accent font-medium underline hover:text-accent/80 transition-colors"
         >
           Esri
         </a>
@@ -258,7 +258,7 @@ export default function Experience() {
         transformOrigin: "top center",
         boxShadow,
       }}
-      className="min-h-screen py-32 px-4 md:px-8 lg:px-9 relative overflow-hidden rounded-t-[40px] md:rounded-t-[60px] bg-[#E8E6DD]"
+      className="min-h-screen py-32 px-4 md:px-8 lg:px-9 relative overflow-hidden rounded-t-[40px] md:rounded-t-[60px] bg-dark"
     >
       <div className="max-w-[1400px] mx-auto w-full" ref={ref}>
         {/* Intro text */}
@@ -268,10 +268,10 @@ export default function Experience() {
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
         >
-          <p className="text-sm font-medium text-gray-600 mb-6">
+          <p className="text-sm font-medium text-text/70 mb-6">
             Shipping solutions across the stack.
           </p>
-          <h2 className="text-5xl md:text-6xl font-display font-bold text-gray-900">
+          <h2 className="text-5xl md:text-6xl font-display font-bold text-text">
             Experience
           </h2>
           <div className="mt-4 h-1.5 w-24 rounded-full bg-gradient-to-r from-[rgb(210,69,88)] via-[rgb(230,109,120)] to-[rgb(210,69,88)] shadow-[0_8px_24px_rgba(210,69,88,0.3)]" />
@@ -284,7 +284,7 @@ export default function Experience() {
           ))}
 
           {/* Bottom line */}
-          <div className="relative w-full h-px bg-gray-300" />
+          <div className="relative w-full h-px bg-border" />
         </div>
 
       </div>

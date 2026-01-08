@@ -95,7 +95,7 @@ export default function About() {
       />
 
       {/* Radial gradient overlay for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,101,0,0.05)_0%,transparent_5%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(190,49,68,0.08)_0%,transparent_50%)] pointer-events-none" />
 
       <div className="max-w-[1200px] mx-auto w-full relative z-10" ref={ref}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

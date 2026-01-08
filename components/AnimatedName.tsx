@@ -33,7 +33,7 @@ export default function AnimatedName() {
         animate="visible"
       >
         {/* First Name */}
-        <h1 className="text-5xl md:text-8xl lg:text-9xl font-signature font-bold leading-tight">
+        <h1 className="text-5xl md:text-8xl lg:text-9xl font-display font-bold leading-tight">
           {firstNameLetters.map((letter, i) => (
             <motion.span
               key={`first-${i}`}
@@ -41,7 +41,7 @@ export default function AnimatedName() {
               variants={letterVariants}
               className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-white via-text to-text/60"
               style={{
-                fontFamily: "var(--font-signature)",
+                fontFamily: "var(--font-display)",
               }}
             >
               {letter}
@@ -50,7 +50,7 @@ export default function AnimatedName() {
         </h1>
 
         {/* Last Name */}
-        <h1 className="text-5xl md:text-8xl lg:text-9xl font-signature font-bold leading-tight">
+        <h1 className="text-5xl md:text-8xl lg:text-9xl font-display font-bold leading-tight">
           {lastNameLetters.map((letter, i) => (
             <motion.span
               key={`last-${i}`}
@@ -58,7 +58,7 @@ export default function AnimatedName() {
               variants={letterVariants}
               className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-white via-text to-text/60"
               style={{
-                fontFamily: "var(--font-signature)",
+                fontFamily: "var(--font-display)",
               }}
             >
               {letter}
