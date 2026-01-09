@@ -17,34 +17,54 @@ A modern, animated portfolio website built with Next.js, TypeScript, and Framer 
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first styling
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [Bun](https://bun.sh/) - JavaScript runtime & package manager
 - [Inter](https://fonts.google.com/specimen/Inter) & [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) - Typography
 
 ## Getting Started
 
+### Prerequisites
+
+This project uses [Bun](https://bun.sh/) as its JavaScript runtime and package manager.
+
+```bash
+# Install Bun (macOS/Linux)
+curl -fsSL https://bun.sh/install | bash
+
+# Or via Homebrew
+brew install oven-sh/bun/bun
+```
+
 ### Installation
 
 ```bash
-npm install
+bun install
 ```
 
 ### Development
 
 ```bash
-npx next dev
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view in your browser.
 
-> Tip: If you prefer npm scripts, `npm run dev` is an alias for the same command.
-
 ### Build
 
 ```bash
-npx next build
-npx next start
+bun run build
+bun run start
 ```
 
-> Tip: If you prefer npm scripts, `npm run build && npm start` does the same.
+### Using npm (Alternative)
+
+If you prefer npm, all commands work with npm as well:
+
+```bash
+npm install
+npm run dev
+npm run build
+npm start
+```
 
 ## Customization
 
