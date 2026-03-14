@@ -1,21 +1,61 @@
 "use client";
 
+import type { Variants } from "motion/react";
 import { motion, useAnimation } from "motion/react";
 import type { HTMLAttributes } from "react";
 import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface CompassIconHandle {
+export interface BookTextHandle {
   startAnimation: () => void;
   stopAnimation: () => void;
 }
 
-interface CompassIconProps extends HTMLAttributes<HTMLDivElement> {
+interface BookTextProps extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-const CompassIcon = forwardRef<CompassIconHandle, CompassIconProps>(
+const PATH_VARIANTS: Variants = {
+  normal: {
+    opacity: 1,
+    pathLength: 1,
+    transition: {
+      duration: 0.6,
+      opacity: { duration: 0.1 },
+    },
+  },
+  animate: {
+    opacity: [0, 1],
+    pathLength: [0, 1],
+    transition: {
+      duration: 0.6,
+      opacity: { duration: 0.1 },
+    },
+  },
+};
+
+const LINE_VARIANTS: Variants = {
+  normal: {
+    opacity: 1,
+    pathLength: 1,
+    transition: {
+      duration: 0.4,
+      opacity: { duration: 0.1 },
+    },
+  },
+  animate: {
+    opacity: [0, 1],
+    pathLength: [0, 1],
+    transition: {
+      duration: 0.4,
+      delay: 0.3,
+      opacity: { duration: 0.1, delay: 0.3 },
+    },
+  },
+};
+
+const BookTextIcon = forwardRef<BookTextHandle, BookTextProps>(
   ({ onMouseEnter, onMouseLeave, className, size = 28, ...props }, ref) => {
     const controls = useAnimation();
     const isControlledRef = useRef(false);
@@ -69,23 +109,22 @@ const CompassIcon = forwardRef<CompassIconHandle, CompassIconProps>(
           width={size}
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle cx="12" cy="12" r="10" />
-          <motion.polygon
+          {/* Book shape */}
+          <motion.path
             animate={controls}
-            points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-            transition={{
-              type: "spring",
-              stiffness: 120,
-              damping: 15,
-            }}
-            variants={{
-              normal: {
-                rotate: 0,
-              },
-              animate: {
-                rotate: 360,
-              },
-            }}
+            d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+            variants={PATH_VARIANTS}
+          />
+          {/* Text lines */}
+          <motion.path
+            animate={controls}
+            d="M8 7h6"
+            variants={LINE_VARIANTS}
+          />
+          <motion.path
+            animate={controls}
+            d="M8 11h8"
+            variants={LINE_VARIANTS}
           />
         </svg>
       </div>
@@ -93,6 +132,6 @@ const CompassIcon = forwardRef<CompassIconHandle, CompassIconProps>(
   }
 );
 
-CompassIcon.displayName = "CompassIcon";
+BookTextIcon.displayName = "BookTextIcon";
 
-export { CompassIcon };
+export { BookTextIcon };

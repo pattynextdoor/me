@@ -33,7 +33,7 @@ export const fadeScaleIn: Variants = {
 
 // Hover interaction for list rows
 export const rowHover = {
-  backgroundColor: "#111111",
-  scale: 1.005,
-  transition: { duration: 0.15 },
+  backgroundColor: "rgba(255, 255, 255, 0.03)",
+  x: 4,
+  transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] as const },
 };

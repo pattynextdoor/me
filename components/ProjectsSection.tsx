@@ -4,12 +4,13 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { staggerContainer, fadeScaleIn, rowHover } from "@/lib/animations";
 
-import { CompassIcon } from "@/components/ui/compass";
+import { ZapIcon } from "@/components/ui/zap";
 import { FileStackIcon } from "@/components/ui/file-stack";
 import { TerminalIcon } from "@/components/ui/terminal";
 import { BrainIcon } from "@/components/ui/brain";
 import { SparklesIcon } from "@/components/ui/sparkles";
-import { ZapIcon } from "@/components/ui/zap";
+import { AudioLinesIcon } from "@/components/ui/audio-lines";
+import { BookTextIcon } from "@/components/ui/book-text";
 import { FishSymbolIcon } from "@/components/ui/fish-symbol";
 import { BotIcon } from "@/components/ui/bot";
 
@@ -30,23 +31,23 @@ const projects: ProjectItem[] = [
   {
     name: "tp",
     description: "Teleport anywhere in or between projects. My rendition of zoxide.",
-    color: "#3B82F6",
-    Icon: CompassIcon,
-    href: "https://github.com/ptumbucon/tp",
+    color: "#FACC15",
+    Icon: ZapIcon,
+    href: "https://github.com/pattynextdoor/tp",
   },
   {
     name: "ditto",
     description: "A personal dotfile manager that supports hooks. My rendition of GNU Stow.",
     color: "#8B5CF6",
     Icon: FileStackIcon,
-    href: "https://github.com/ptumbucon/ditto",
+    href: "https://github.com/pattynextdoor/ditto",
   },
   {
     name: "uberfetch",
     description: "Arcane shapes in your terminal! My rendition of neofetch.",
     color: "#F97316",
-    Icon: TerminalIcon,
-    href: "https://github.com/ptumbucon/uberfetch",
+    Icon: SparklesIcon,
+    href: "https://github.com/pattynextdoor/uberfetch",
   },
   {
     name: "Conclave",
@@ -58,13 +59,13 @@ const projects: ProjectItem[] = [
     name: "Vex Dashboard",
     description: "WebGL-powered singularity dashboard for my Openclaw agent.",
     color: "#EC4899",
-    Icon: SparklesIcon,
+    Icon: AudioLinesIcon,
   },
   {
     name: "MeetingMind",
     description: "Obsidian plugin that turns messy transcripts into linked notes and action items.",
     color: "#22C55E",
-    Icon: ZapIcon,
+    Icon: BookTextIcon,
     href: "https://meetingmind.me",
   },
   {
@@ -79,6 +80,7 @@ const projects: ProjectItem[] = [
     description: "Discord bot for my FGC community. Slash commands for LFG and room threads.",
     color: "#EF4444",
     Icon: BotIcon,
+    href: "https://github.com/pattynextdoor/lfg-bot",
   },
 ];
 
@@ -92,21 +94,23 @@ function ProjectRow({ item }: { item: ProjectItem }) {
   return (
     <Wrapper
       {...wrapperProps}
-      className="flex items-center gap-3 py-2 -mx-3 px-3 rounded-md cursor-pointer"
+      className="flex items-start gap-3 py-3 -mx-3 px-3 rounded-md cursor-pointer"
       variants={fadeScaleIn}
       whileHover={rowHover}
       onHoverStart={() => iconRef.current?.startAnimation()}
       onHoverEnd={() => iconRef.current?.stopAnimation()}
     >
-      <span className="flex-shrink-0" style={{ color: item.color }}>
+      <span className="flex-shrink-0 mt-[2px]" style={{ color: item.color }}>
         <item.Icon ref={iconRef} size={18} />
       </span>
-      <span className="text-[15px] font-medium text-primary flex-shrink-0">
-        {item.name}
-      </span>
-      <span className="text-[14px] text-secondary truncate">
-        {item.description}
-      </span>
+      <div className="flex-1 min-w-0">
+        <span className="text-sm font-medium text-primary block">
+          {item.name}
+        </span>
+        <span className="text-[13px] text-secondary mt-0.5 block">
+          {item.description}
+        </span>
+      </div>
     </Wrapper>
   );
 }
@@ -118,12 +122,12 @@ export default function ProjectsSection() {
   return (
     <motion.section
       ref={ref}
-      className="py-10"
+      className="py-6"
       variants={staggerContainer}
       initial="hidden"
       animate={isInView ? "show" : "hidden"}
     >
-      <div className="w-full h-px bg-border mb-8" />
+      <div className="w-full h-px bg-border mb-6" />
       <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-tertiary mb-4">
         Projects
       </h2>
