@@ -1,15 +1,29 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { staggerContainer, fadeScaleIn, rowHover } from "@/lib/animations";
+
+import { CompassIcon } from "@/components/ui/compass";
+import { FileStackIcon } from "@/components/ui/file-stack";
+import { TerminalIcon } from "@/components/ui/terminal";
+import { BrainIcon } from "@/components/ui/brain";
+import { SparklesIcon } from "@/components/ui/sparkles";
+import { ZapIcon } from "@/components/ui/zap";
+import { FishSymbolIcon } from "@/components/ui/fish-symbol";
+import { BotIcon } from "@/components/ui/bot";
+
+interface AnimatedIconHandle {
+  startAnimation: () => void;
+  stopAnimation: () => void;
+}
 
 interface ProjectItem {
   name: string;
   description: string;
   color: string;
   href?: string;
-  icon: string;
+  Icon: React.ForwardRefExoticComponent<any>;
 }
 
 const projects: ProjectItem[] = [
@@ -17,71 +31,59 @@ const projects: ProjectItem[] = [
     name: "tp",
     description: "Teleport anywhere in or between projects. My rendition of zoxide.",
     color: "#3B82F6",
-    icon: "compass",
+    Icon: CompassIcon,
     href: "https://github.com/ptumbucon/tp",
   },
   {
     name: "ditto",
     description: "A personal dotfile manager that supports hooks. My rendition of GNU Stow.",
     color: "#8B5CF6",
-    icon: "files",
+    Icon: FileStackIcon,
     href: "https://github.com/ptumbucon/ditto",
   },
   {
     name: "uberfetch",
     description: "Arcane shapes in your terminal! My rendition of neofetch.",
     color: "#F97316",
-    icon: "terminal",
+    Icon: TerminalIcon,
     href: "https://github.com/ptumbucon/uberfetch",
   },
   {
     name: "Conclave",
     description: "Digs through your meetings and arcanely visualizes connections between them.",
     color: "#06B6D4",
-    icon: "brain-circuit",
+    Icon: BrainIcon,
   },
   {
     name: "Vex Dashboard",
     description: "WebGL-powered singularity dashboard for my Openclaw agent.",
     color: "#EC4899",
-    icon: "sparkles",
+    Icon: SparklesIcon,
   },
   {
     name: "MeetingMind",
     description: "Obsidian plugin that turns messy transcripts into linked notes and action items.",
     color: "#22C55E",
-    icon: "lightbulb",
+    Icon: ZapIcon,
     href: "https://meetingmind.me",
   },
   {
     name: "Stocking Fish",
     description: "Modern webapp for planning aquarium livestocking. My rendition of aqadvisor.",
     color: "#14B8A6",
-    icon: "fish",
+    Icon: FishSymbolIcon,
     href: "https://stocking.fish",
   },
   {
     name: "LFG Bot",
     description: "Discord bot for my FGC community. Slash commands for LFG and room threads.",
     color: "#EF4444",
-    icon: "gamepad-2",
+    Icon: BotIcon,
   },
 ];
 
-function ProjectIcon({ color }: { color: string }) {
-  return (
-    <span
-      className="w-4 h-4 flex items-center justify-center text-sm flex-shrink-0"
-      style={{ color }}
-      aria-hidden="true"
-    >
-      &#x2726;
-    </span>
-  );
-}
-
 function ProjectRow({ item }: { item: ProjectItem }) {
-  const [isHovered, setIsHovered] = useState(false);
+  const iconRef = useRef<AnimatedIconHandle>(null);
   const Wrapper = item.href ? motion.a : motion.div;
   const wrapperProps = item.href
     ? { href: item.href, target: "_blank" as const, rel: "noopener noreferrer" }
@@ -93,10 +95,12 @@ function ProjectRow({ item }: { item: ProjectItem }) {
       className="flex items-center gap-3 py-2 -mx-3 px-3 rounded-md cursor-pointer"
       variants={fadeScaleIn}
       whileHover={rowHover}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => iconRef.current?.startAnimation()}
+      onHoverEnd={() => iconRef.current?.stopAnimation()}
     >
-      <ProjectIcon color={item.color} />
+      <span className="flex-shrink-0" style={{ color: item.color }}>
+        <item.Icon ref={iconRef} size={18} />
+      </span>
       <span className="text-[15px] font-medium text-primary flex-shrink-0">
         {item.name}
       </span>
