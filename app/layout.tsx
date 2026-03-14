@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
+import InkBleed from "@/components/InkBleed";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
@@ -39,8 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={GeistMono.variable}>
-      <body className="font-mono bg-background text-primary antialiased">
-        <main>{children}</main>
+      <body className="font-mono bg-background text-primary antialiased grain-overlay">
+        <InkBleed />
+        <main className="relative z-10">{children}</main>
         <Analytics />
       </body>
     </html>
