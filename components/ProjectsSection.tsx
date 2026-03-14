@@ -54,12 +54,14 @@ const projects: ProjectItem[] = [
     description: "Digs through your meetings and arcanely visualizes connections between them.",
     color: "#06B6D4",
     Icon: BrainIcon,
+    href: "https://useconclave.com",
   },
   {
     name: "Vex Dashboard",
     description: "WebGL-powered singularity dashboard for my Openclaw agent.",
     color: "#EC4899",
     Icon: AudioLinesIcon,
+    href: "https://github.com/pattynextdoor/vex-dashboard",
   },
   {
     name: "MeetingMind",
