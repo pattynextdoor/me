@@ -1,30 +1,7 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Oxanium, JetBrains_Mono, Geist } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
 import { Analytics } from "@vercel/analytics/react";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-const oxanium = Oxanium({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  weight: ["400", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Patrick Tumbucon",
@@ -33,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://patricktumbucon.com"),
   openGraph: {
     title: "Patrick Tumbucon - Software Engineer",
-    description: "Patrick Tumbucon\'s personal website",
+    description: "Patrick Tumbucon's personal website",
     url: "https://patricktumbucon.com",
     siteName: "Patrick Tumbucon",
     images: [
@@ -61,9 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(spaceGrotesk.variable, oxanium.variable, jetbrainsMono.variable, "font-sans", geist.variable)}>
-      <body className="font-body bg-dark">
-        <Navigation />
+    <html lang="en" className={GeistMono.variable}>
+      <body className="font-mono bg-background text-primary antialiased">
         <main>{children}</main>
         <Analytics />
       </body>
