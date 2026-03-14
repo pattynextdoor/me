@@ -1,0 +1,49 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { staggerContainer, fadeScaleIn } from "@/lib/animations";
+
+export default function Header() {
+  return (
+    <motion.header
+      className="pt-16 pb-12"
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+    >
+      <motion.div variants={fadeScaleIn} className="flex items-center justify-between mb-8">
+        <h1 className="text-4xl font-semibold tracking-[-0.03em] text-primary">
+          Patrick Tumbucon
+        </h1>
+        <nav className="flex items-center gap-6">
+          <a
+            href="/blog"
+            className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4"
+          >
+            Blog
+          </a>
+          <a
+            href="https://github.com/ptumbucon"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4"
+          >
+            GitHub
+          </a>
+        </nav>
+      </motion.div>
+
+      <motion.p variants={fadeScaleIn} className="text-sm text-tertiary mb-6">
+        Seattle, WA
+      </motion.p>
+
+      <motion.p
+        variants={fadeScaleIn}
+        className="text-[15px] leading-relaxed text-secondary max-w-[480px]"
+      >
+        I build things that are useful to me. I enjoy thematic flair,
+        delightful QoL, and shifting parts of a design in a bold direction.
+      </motion.p>
+    </motion.header>
+  );
+}
