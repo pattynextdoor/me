@@ -24,7 +24,10 @@
       "Bash(bun add:*)",
       "Bash(bun remove:*)",
       "Bash(bunx shadcn@latest:*)",
-      "WebFetch(domain:lucide-animated.com)"
+      "WebFetch(domain:lucide-animated.com)",
+      "Bash(do echo:*)",
+      "Bash(bun run:*)",
+      "Bash(bunx tsc:*)"
     ],
     "deny": [],
     "ask": []
