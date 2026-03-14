@@ -11,9 +11,9 @@ export function Callout({ type = "info", children }: { type?: "info"|"warn"|"tip
   return (
     <div
       style={{ borderLeft: `4px solid ${color}`, background: "rgba(255,255,255,0.04)" }}
-      className="rounded-md px-4 py-3 my-6 border border-border/40"
+      className="rounded-md px-4 py-3 my-6 border border-border"
     >
-      <div className="text-sm leading-6 text-text/90">{children}</div>
+      <div className="text-sm leading-6 text-secondary">{children}</div>
     </div>
   );
 }
@@ -23,7 +23,7 @@ export const MDXComponents = {
     <h1
       {...props}
       className={cx(
-        "text-3xl md:text-4xl font-display font-bold text-text tracking-tight mb-6",
+        "text-3xl font-bold text-primary tracking-tight mb-6",
         className,
       )}
     />
@@ -32,7 +32,7 @@ export const MDXComponents = {
     <h2
       {...props}
       className={cx(
-        "text-2xl md:text-3xl font-display font-semibold text-text mt-10 mb-4",
+        "text-2xl font-semibold text-primary mt-10 mb-4",
         className,
       )}
     />
@@ -41,7 +41,7 @@ export const MDXComponents = {
     <h3
       {...props}
       className={cx(
-        "text-xl md:text-2xl font-semibold text-text mt-8 mb-3",
+        "text-xl font-semibold text-primary mt-8 mb-3",
         className,
       )}
     />
@@ -50,7 +50,7 @@ export const MDXComponents = {
     <p
       {...props}
       className={cx(
-        "text-lg md:text-xl leading-relaxed text-text/80",
+        "text-base leading-relaxed text-secondary",
         className,
       )}
     />
@@ -59,7 +59,7 @@ export const MDXComponents = {
     <ul
       {...props}
       className={cx(
-        "list-disc list-outside ml-6 space-y-1 text-lg md:text-xl leading-relaxed text-text/80",
+        "list-disc list-outside ml-6 space-y-1 text-base leading-relaxed text-secondary",
         className,
       )}
     />
@@ -68,7 +68,7 @@ export const MDXComponents = {
     <ol
       {...props}
       className={cx(
-        "list-decimal list-outside ml-6 space-y-1 text-lg md:text-xl leading-relaxed text-text/80",
+        "list-decimal list-outside ml-6 space-y-1 text-base leading-relaxed text-secondary",
         className,
       )}
     />
@@ -83,7 +83,7 @@ export const MDXComponents = {
     <blockquote
       {...props}
       className={cx(
-        "border-l-4 border-border/60 pl-4 text-text/80 italic",
+        "border-l-4 border-border pl-4 text-secondary italic",
         className,
       )}
     />
@@ -92,7 +92,7 @@ export const MDXComponents = {
     <code
       {...props}
       className={cx(
-        "font-mono text-sm bg-dark/60 border border-border/60 rounded px-1.5 py-0.5",
+        "text-sm bg-surface-hover border border-border rounded px-1.5 py-0.5",
         className,
       )}
     />
@@ -101,7 +101,7 @@ export const MDXComponents = {
     <pre
       {...props}
       className={cx(
-        "font-mono text-sm bg-dark/80 border border-border/60 rounded-lg p-4 overflow-auto",
+        "text-sm bg-[#151517] border border-border rounded-lg p-4 overflow-auto",
         className,
       )}
     />
@@ -109,7 +109,7 @@ export const MDXComponents = {
   hr: (props: ComponentProps<"hr">) => (
     <hr
       {...props}
-      className="my-10 border-t border-border/60"
+      className="my-10 border-t border-border"
     />
   ),
   a: ({ className, ...props }: ComponentProps<"a">) => {
@@ -119,8 +119,8 @@ export const MDXComponents = {
         href={props.href ?? "#"}
         className={cx(
           isHeadingAnchor
-            ? "text-text no-underline hover:text-accent"
-            : "text-accent underline underline-offset-2 decoration-accent/60 hover:decoration-accent",
+            ? "text-primary no-underline hover:text-secondary"
+            : "text-primary underline underline-offset-2 decoration-tertiary hover:decoration-primary",
           className,
         )}
       >
@@ -138,7 +138,7 @@ export const MDXComponents = {
         alt={alt}
         width={1200}
         height={630}
-        className={cx("rounded-lg border border-border/40", className)}
+        className={cx("rounded-lg border border-border", className)}
       />
     );
   },

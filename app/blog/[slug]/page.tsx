@@ -59,16 +59,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   });
 
   return (
-    <section className="relative px-4 md:px-8 lg:px-9 pt-28 pb-16">
-      <article className="max-w-3xl mx-auto space-y-8">
+    <section className="px-6 pt-20 pb-16">
+      <article className="max-w-[640px] mx-auto space-y-6">
+        <a
+          href="/blog"
+          className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4 inline-block"
+        >
+          &larr; Blog
+        </a>
         <header className="space-y-4">
-          <p className="text-sm text-text/60 uppercase tracking-wide">
-            Blog
-          </p>
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-text tracking-tight">
+          <h1 className="text-3xl font-bold text-primary tracking-tight">
             {frontmatter.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-text/60">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-tertiary">
             <time dateTime={frontmatter.date}>
               {new Date(frontmatter.date).toLocaleDateString(undefined, {
                 year: "numeric",
@@ -76,12 +79,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 day: "numeric",
               })}
             </time>
-            <span>•</span>
+            <span>·</span>
             <span>{Math.ceil(readingTime.minutes)} min read</span>
           </div>
 
           {frontmatter.coverImage && frontmatter.coverImage.startsWith("/") && (
-            <div className="mt-6 overflow-hidden rounded-2xl border border-border/40 bg-dark/40">
+            <div className="mt-6 overflow-hidden rounded-lg border border-border">
               <Image
                 src={frontmatter.coverImage}
                 alt={frontmatter.title}
@@ -94,8 +97,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           )}
         </header>
 
-          {content}
-        </article>
-      </section>
+        {content}
+      </article>
+    </section>
   );
 }
