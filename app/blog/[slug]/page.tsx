@@ -60,14 +60,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <section className="px-6 pt-20 pb-16">
-      <article className="max-w-[640px] mx-auto space-y-6">
+      <article className="max-w-[680px] mx-auto">
         <a
           href="/blog"
-          className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4 inline-block"
+          className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4 inline-block mb-6"
         >
           &larr; Blog
         </a>
-        <header className="space-y-4">
+        <header className="space-y-4 mb-10">
           <h1 className="text-3xl font-bold text-primary tracking-tight">
             {frontmatter.title}
           </h1>

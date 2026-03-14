@@ -3,12 +3,14 @@
 @theme {
   --color-background: #020617;
   --color-primary: #EDEDED;
+  --color-body: #B4B4BD;
   --color-secondary: #888888;
   --color-tertiary: #555555;
   --color-border: #1A1A1A;
   --color-surface-hover: #111111;
 
   --font-family-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-family-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {

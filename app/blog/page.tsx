@@ -13,7 +13,7 @@ export default async function BlogIndex() {
   const posts = getAllPosts({ includeDrafts: isEnabled });
 
   return (
-    <section className="max-w-[640px] mx-auto px-6 pt-20 pb-16">
+    <section className="max-w-[680px] mx-auto px-6 pt-20 pb-16">
       <a
         href="/"
         className="text-sm text-secondary hover:text-primary transition-colors duration-150 hover:underline underline-offset-4 mb-8 inline-block"

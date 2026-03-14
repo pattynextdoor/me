@@ -23,7 +23,7 @@ export const MDXComponents = {
     <h1
       {...props}
       className={cx(
-        "text-3xl font-bold text-primary tracking-tight mb-6",
+        "text-3xl font-bold text-primary tracking-tight mt-14 mb-6",
         className,
       )}
     />
@@ -32,7 +32,7 @@ export const MDXComponents = {
     <h2
       {...props}
       className={cx(
-        "text-2xl font-semibold text-primary mt-10 mb-4",
+        "text-2xl font-semibold text-primary mt-14 mb-5",
         className,
       )}
     />
@@ -41,7 +41,7 @@ export const MDXComponents = {
     <h3
       {...props}
       className={cx(
-        "text-xl font-semibold text-primary mt-8 mb-3",
+        "text-xl font-semibold text-primary mt-10 mb-4",
         className,
       )}
     />
@@ -50,7 +50,7 @@ export const MDXComponents = {
     <p
       {...props}
       className={cx(
-        "text-base leading-relaxed text-secondary",
+        "text-base leading-7 text-body my-4",
         className,
       )}
     />
@@ -59,7 +59,7 @@ export const MDXComponents = {
     <ul
       {...props}
       className={cx(
-        "list-disc list-outside ml-6 space-y-1 text-base leading-relaxed text-secondary",
+        "list-disc list-outside ml-6 space-y-1.5 text-base leading-7 text-body my-4",
         className,
       )}
     />
@@ -68,7 +68,7 @@ export const MDXComponents = {
     <ol
       {...props}
       className={cx(
-        "list-decimal list-outside ml-6 space-y-1 text-base leading-relaxed text-secondary",
+        "list-decimal list-outside ml-6 space-y-1.5 text-base leading-7 text-body my-4",
         className,
       )}
     />
@@ -76,14 +76,14 @@ export const MDXComponents = {
   li: ({ className, ...props }: ComponentProps<"li">) => (
     <li
       {...props}
-      className={cx("leading-relaxed", className)}
+      className={cx("leading-7", className)}
     />
   ),
   blockquote: ({ className, ...props }: ComponentProps<"blockquote">) => (
     <blockquote
       {...props}
       className={cx(
-        "border-l-4 border-border pl-4 text-secondary italic",
+        "border-l-2 border-border pl-5 text-body italic my-6",
         className,
       )}
     />
@@ -101,7 +101,7 @@ export const MDXComponents = {
     <pre
       {...props}
       className={cx(
-        "text-sm bg-[#151517] border border-border rounded-lg p-4 overflow-auto",
+        "text-sm bg-[#151517] border border-border rounded-lg p-5 overflow-auto my-6",
         className,
       )}
     />

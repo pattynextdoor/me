@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import { Analytics } from "@vercel/analytics/react";
@@ -39,8 +40,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={GeistMono.variable}>
-      <body className="font-mono bg-background text-primary antialiased grain-overlay">
+    <html lang="en" className={`${GeistMono.variable} ${GeistSans.variable}`}>
+      <body className="font-sans bg-background text-primary antialiased grain-overlay">
         <CustomCursor />
         <main className="relative z-10">{children}</main>
         <Analytics />
