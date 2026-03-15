@@ -15,14 +15,6 @@ export const metadata: Metadata = {
     description: "Patrick Tumbucon's personal website",
     url: "https://patricktumbucon.com",
     siteName: "Patrick Tumbucon",
-    images: [
-      {
-        url: "/linkPreview.png",
-        width: 1200,
-        height: 630,
-        alt: "Patrick Tumbucon - Software Engineer",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
@@ -30,7 +22,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Patrick Tumbucon - Software Engineer",
     description: "Personal website of Patrick Tumbucon, Software Engineer",
-    images: ["/linkPreview.png"],
   },
 };
 
