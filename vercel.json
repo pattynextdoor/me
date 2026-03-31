@@ -4,6 +4,16 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["iad1"],
+  "rewrites": [
+    {
+      "source": "/toph",
+      "destination": "https://toph-landing-patrick-tumbucons-projects.vercel.app/toph"
+    },
+    {
+      "source": "/toph/:path*",
+      "destination": "https://toph-landing-patrick-tumbucons-projects.vercel.app/toph/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
