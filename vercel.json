@@ -7,11 +7,11 @@
   "rewrites": [
     {
       "source": "/toph",
-      "destination": "https://toph-landing-patrick-tumbucons-projects.vercel.app/toph"
+      "destination": "https://toph-landing.vercel.app/toph"
     },
     {
       "source": "/toph/:path*",
-      "destination": "https://toph-landing-patrick-tumbucons-projects.vercel.app/toph/:path*"
+      "destination": "https://toph-landing.vercel.app/toph/:path*"
     }
   ],
   "headers": [
