@@ -1,9 +1,11 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Globe } from "lucide-react";
-import { staggerContainer, fadeScaleIn, rowHover } from "@/lib/animations";
+import { cascadeContainer, fadeScaleIn, rowHover } from "@/lib/animations";
+
+// Experience: 4 animated rows, starts after Header's 3 items (0.24s offset)
+const experienceContainer = cascadeContainer(0.24);
 
 // Official Azure "A" logo with gradient (matches Paper design)
 function AzureLogo({ className }: { className?: string }) {
@@ -136,16 +138,10 @@ function ExperienceRow({ item }: { item: ExperienceItem }) {
 }
 
 export default function ExperienceSection() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
   return (
     <motion.section
-      ref={ref}
       className="py-6"
-      variants={staggerContainer}
-      initial="hidden"
-      animate={isInView ? "show" : "hidden"}
+      variants={experienceContainer}
     >
       <div className="w-full h-px bg-border mb-6" />
       <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-tertiary mb-4">

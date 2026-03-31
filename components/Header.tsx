@@ -1,15 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { staggerContainer, fadeScaleIn } from "@/lib/animations";
+import { cascadeContainer, fadeScaleIn } from "@/lib/animations";
+
+// Header: 3 animated children starting at 0s (items at 0, 0.08, 0.16s)
+const headerContainer = cascadeContainer(0);
 
 export default function Header() {
   return (
     <motion.header
       className="pt-16 pb-6"
-      variants={staggerContainer}
-      initial="hidden"
-      animate="show"
+      variants={headerContainer}
     >
       <motion.div variants={fadeScaleIn} className="flex items-center justify-between mb-8">
         <h1 className="text-[36px] font-semibold tracking-[-0.04em] text-primary leading-none">

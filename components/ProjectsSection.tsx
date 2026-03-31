@@ -1,8 +1,11 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef } from "react";
-import { staggerContainer, fadeScaleIn, rowHover } from "@/lib/animations";
+import { cascadeContainer, fadeScaleIn, rowHover } from "@/lib/animations";
+
+// Projects: 9 animated rows, starts after Experience's 4 items end (~0.56s)
+const projectsContainer = cascadeContainer(0.56);
 
 import { ZapIcon } from "@/components/ui/zap";
 import { FileStackIcon } from "@/components/ui/file-stack";
@@ -125,16 +128,10 @@ function ProjectRow({ item }: { item: ProjectItem }) {
 }
 
 export default function ProjectsSection() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
   return (
     <motion.section
-      ref={ref}
       className="py-6"
-      variants={staggerContainer}
-      initial="hidden"
-      animate={isInView ? "show" : "hidden"}
+      variants={projectsContainer}
     >
       <div className="w-full h-px bg-border mb-6" />
       <h2 className="text-[13px] font-semibold uppercase tracking-[0.1em] text-tertiary mb-4">

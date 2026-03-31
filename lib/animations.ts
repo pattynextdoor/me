@@ -18,6 +18,22 @@ export const staggerContainer: Variants = {
   },
 };
 
+// Factory for cascading stagger containers — each section starts after
+// the previous one's children have begun appearing, creating a single
+// top-to-bottom waterfall across the whole page.
+export function cascadeContainer(delayOffset: number): Variants {
+  return {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        delayChildren: delayOffset,
+        staggerChildren: 0.08,
+      },
+    },
+  };
+}
+
 // Fade + slight scale entrance for individual items
 export const fadeScaleIn: Variants = {
   hidden: {
