@@ -29,6 +29,13 @@ interface ProjectItem {
 
 const projects: ProjectItem[] = [
   {
+    name: "toph",
+    description: "Terminal dashboard that monitors AI coding agents in real-time. btop for AI.",
+    color: "#10B981",
+    Icon: TerminalIcon,
+    href: "https://patricktumbucon.com/toph",
+  },
+  {
     name: "tp",
     description: "Teleport anywhere in or between projects. My rendition of zoxide.",
     color: "#FACC15",
